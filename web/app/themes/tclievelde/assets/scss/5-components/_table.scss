@@ -1,0 +1,36 @@
+tr {
+  border-top: 1px solid $black;
+}
+
+td, th {
+  padding: 5px 15px;
+}
+
+th {
+  color: $grey-light;
+  font-weight: normal;
+}
+
+.c-table__speler {
+  padding: 0 50px 0 0;
+}
+
+.c-table__scroll {
+  overflow: visible;
+}
+
+@include media-breakpoint-down(md) {
+  .c-table__scroll {
+    overflow: scroll;
+  }
+
+  .c-table__scroll-wrapper {
+    min-width: 990px;
+    max-width: 990px;
+  }
+
+  .c-table__fixed {
+    font-weight: normal;
+    color: #000;
+  }
+}

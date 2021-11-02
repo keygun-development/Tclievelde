@@ -1,0 +1,32 @@
+//Import all the scss partials to be built into css
+@use "./../../../../../../node_modules/swiper/swiper-bundle.css";
+@import "./../../../../../../node_modules/swiper/swiper";
+
+@import "0-settings/colors",
+        "0-settings/settings";
+
+@import "2-generic/font";
+
+@import "3-elements/a",
+        "3-elements/titles",
+        "3-elements/p",
+        "3-elements/form",
+        "3-elements/img";
+
+@import "5-components/_header",
+        "5-components/_typography",
+        "5-components/_images",
+        "5-components/_news",
+        "5-components/_match",
+        "5-components/_buttons",
+        "5-components/_section",
+        "5-components/_table",
+        "5-components/_legend",
+        "5-components/_footer",
+        "5-components/_errors";
+
+@import "6-utilities/index";
+
+//Import bootstrap last
+@import "7-trumps/bootstrap-custom";
+@import "7-trumps/bootstrap-overwrite";

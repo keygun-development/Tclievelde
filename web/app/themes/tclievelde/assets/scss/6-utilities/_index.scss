@@ -1,0 +1,123 @@
+.container {
+  padding-left:30px !important;
+  padding-right:30px !important;
+}
+
+.text-color--primary {
+  color: $primary !important;
+
+  &:hover {
+    color: $primary !important;
+  }
+}
+
+.bg-black {
+  background-color: black !important;
+}
+
+.grow {
+  transition: all .1s ease-in-out;
+}
+
+.grow:hover {
+  transform: scale(1.05);
+}
+
+.blur {
+  -webkit-filter: url(#blur-filter);
+  filter: url(#blur-filter);
+  -webkit-filter: blur(9px);
+  filter: blur(9px);
+}
+
+.display-flex {
+  display: flex;
+}
+
+.text-color--dark {
+  color: $black !important;
+
+  & * {
+    color: $black;
+  }
+  &:hover {
+    color: $black !important;
+  }
+}
+
+.text-color--gray {
+  color: $gray !important;
+
+  &:hover {
+    color: $gray !important;
+  }
+}
+
+.text-color--dark-gray {
+  color: $textGray !important;
+  &:hover {
+    color: $textGray !important;
+  }
+}
+
+.text-color--white {
+  color: $white !important;
+  &:hover {
+    color: $white !important;
+  }
+}
+
+.text-color--blue {
+  color: $blue !important;
+
+  &:hover {
+    color: $blue !important;
+  }
+}
+
+.fs-small {
+  font-size: 0.8rem;
+}
+
+.fs-large {
+  font-size: 1.6rem;
+}
+
+.background--black {
+  background-color: $black;
+}
+
+.background--white {
+  background-color: $white;
+}
+
+.background--grey {
+  background-color: $textGray;
+}
+
+.background--blue {
+  background-color: $blue;
+}
+
+.background--primary {
+  background-color: $primary;
+}
+
+.background--orange-washed {
+  background-color: $tao-baby-blue;
+}
+
+.padding-right--large {
+  padding-right: 9rem;
+}
+
+.opacity-50 {
+  opacity: 0.5;
+}
+
+@include media-breakpoint-down(xs) {
+  .container {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+}

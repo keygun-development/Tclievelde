@@ -1,0 +1,46 @@
+.c-footer__background {
+  background-color: #335d61;
+  padding: 50px;
+}
+
+.title--footer {
+  color: $white;
+  display: inline-block;
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-bottom: 3px solid #538493;
+}
+
+.menu {
+  padding: 0;
+
+  .menu-item {
+    list-style-type: none;
+
+    &.active {
+
+      &:before {
+        content: '';
+        position: absolute;
+        margin-top: 7px;
+        margin-left: -5px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #80d0ff;
+      }
+    }
+
+    a {
+      margin-left: 10px;
+      color: $white;
+    }
+  }
+}
+
+@include media-breakpoint-down(md) {
+  .c-footer__background {
+    padding: 10px 0;
+  }
+}

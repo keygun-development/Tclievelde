@@ -1,0 +1,17 @@
+.title {
+  display: inline-block;
+  font-size: 2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-bottom: 3px solid $tao-blue;
+}
+
+.title--no-border {
+  border: none;
+}
+
+@include media-breakpoint-down(md) {
+ .title {
+   font-size: 1.4rem;
+ }
+}

@@ -1,0 +1,27 @@
+img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.wp-block-image img {
+    max-width: 100%;
+    height: auto;
+}
+
+img.max-height-150px {
+    max-height: 150px;
+}
+
+.size-full {
+    max-width: 100%;
+    height: auto;
+}
+
+.wp-caption {
+    width: 100% !important;
+    height: auto;
+}
+
+.wp-caption-text {
+    font-size: 0.9rem !important;
+}

@@ -1,0 +1,66 @@
+//Import the Bootstrap variables
+@import "./../../../../../../../node_modules/bootstrap/scss/functions";
+@import "./../../../../../../../node_modules/bootstrap/scss/variables";
+@import "./../../../../../../../node_modules/bootstrap/scss/mixins";
+
+//Sizes
+$header-height: 80px;
+$header-height-mobile: 52px;
+
+$spacer: 1rem;
+
+$xs: 0;
+$sm: 600px;
+$md: 800px;
+$lg: 1000px;
+$xl: 1700px;
+
+$grid-columns:      20;
+$grid-gutter-width: 0;
+//Breakpoints
+$grid-breakpoints: (
+  // Extra small screen / phone
+        xs: $xs,
+  // Small screen / phone
+        sm: $sm,
+  // Medium screen / tablet
+        md: $md,
+  // Large screen / desktop
+        lg: $lg,
+  // Extra large screen / wide desktop
+        xl: $xl
+);
+
+$container-max-widths: (
+        sm: 950px,
+        md: 1250px,
+        lg: 1300px,
+        xl: 1400px
+);
+
+//Set default Bootstrap variables
+$border-radius-base: 0;
+
+@mixin article-premium__blur {
+  filter: progid:DXImageTransform.Microsoft.Blur(PixelRadius='3');
+  -webkit-filter: url(#blur-filter);
+  filter: url(#blur-filter);
+  -webkit-filter: blur(9px);
+  filter: blur(9px);
+  background-color: rgba($white, 0.2);
+}
+
+//Breakpoints
+$container-large-desktop: (1700px + $grid-gutter-width);
+$container-desktop: (940px + $grid-gutter-width);
+
+
+// font size
+$body-font-size: 17px;
+$small-font-size: 14px;
+
+/* font size + 8px = line height */
+@mixin font-size($sizeValue: 17, $line: $sizeValue + 10) {
+    font-size: ($sizeValue);
+    line-height: ($line);
+}

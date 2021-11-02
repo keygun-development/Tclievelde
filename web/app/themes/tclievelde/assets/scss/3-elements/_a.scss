@@ -1,0 +1,28 @@
+a.underlined {
+  display: inline-block;
+  color: $primary;
+  font-weight: 500;
+  padding-bottom: 5px;
+  border-bottom: 3px solid $primary;
+  text-transform: uppercase;
+}
+
+
+.no-hover:hover, .no-hover {
+  text-decoration: none !important;
+}
+
+.no-hover--white, .no-hover--white:hover {
+  cursor: default;
+  color: #fff;
+}
+
+a:not(.no-hover):hover {
+  text-decoration: none !important;
+  color: $black;
+}
+
+
+a.small {
+  font-size: 12px;
+}

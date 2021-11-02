@@ -1,0 +1,152 @@
+html {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.header {
+  height: 100px;
+  z-index: 0;
+
+  .header__nav {
+    display: flex;
+    justify-content: center;
+
+    .header__nav-item {
+      padding: 34px 15px;
+
+      &.active {
+        border-bottom: 3px solid $tao-baby-blue;
+
+        .header__nav-item__text {
+          color: $black;
+          font-weight: bold;
+        }
+      }
+
+      &:hover {
+        .header__nav-item__text {
+          color: $gray;
+          transition: .3s;
+        }
+      }
+
+      .header__nav-item__text {
+        color: $gray;
+        font-size: 1.25rem;
+        transition: .3s;
+      }
+    }
+  }
+}
+
+.header__hamburger-nav {
+  display: none;
+}
+
+.header--title {
+  display: flex;
+  justify-content: center;
+  color: $white;
+  margin-top: 50px;
+  letter-spacing: 10px;
+}
+
+.hamburger__header {
+  background-color: #538493;
+  padding: 10px;
+
+  div {
+    color: #fff;
+  }
+
+  &.active {
+    background-color: #80d0ff;
+    div {
+      font-weight: bold;
+    }
+  }
+}
+
+.header__hamburger {
+  display: block;
+  position: absolute;
+  top: 20px;
+  right: 40px;
+
+  .one, .two, .three {
+    width: 20px;
+    border-radius: 1px;
+    height: 2px;
+    background-color: #fff;
+    position: absolute;
+    transition: .3s;
+  }
+
+  .two {
+    margin-top: 5px;
+  }
+
+  .three {
+    margin-top: 10px;
+  }
+
+  &.active {
+
+    .one {
+      transition: .3s;
+      transform: rotate(45deg);
+      margin-top: 5px;
+    }
+
+    .two {
+      opacity: 0;
+      transition: .3s;
+    }
+
+    .three {
+      transition: .3s;
+      transform: rotate(-45deg);
+      margin-top: 5px;
+    }
+  }
+}
+
+@include media-breakpoint-down(md) {
+
+  .header__nav {
+    display: none !important;
+  }
+
+  .header__hamburger-nav {
+    display: block;
+    height: 0;
+    overflow: hidden;
+    background-color: white;
+    transition: .3s;
+
+    &.active {
+      height: 220px;
+      transition: .3s;
+
+      a {
+
+        div {
+          display: block;
+          transition: .3s;
+        }
+      }
+    }
+  }
+
+  .header--title {
+    margin-top: 0;
+    letter-spacing: 5px;
+    font-size: 1.2em;
+  }
+
+}
+
+.c-header__hero-img {
+  height: 100px;
+  width: auto;
+}
