@@ -5,5 +5,5 @@
         header('location: /');
     } else {
         header('location: /inloggen');
-    }
+    } 
 ?>
