@@ -10,15 +10,10 @@ if (isset($_POST['inloggen'])) {
 }
 
 get_header();
+require 'page.php';
 ?>
 <div class="bg-blue">
     <div class="container section">
-        <h1>
-            <?php echo get_the_title(); ?>
-        </h1>
-        <p>
-            <?php echo get_the_content(); ?>
-        </p>
         <form method="post" class="col-6">
             <p>
                 Gebruikersnaam:

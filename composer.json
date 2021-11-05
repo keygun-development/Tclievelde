@@ -43,7 +43,8 @@
     "wpackagist-plugin/wordpress-seo": "^17.2",
     "ext-json": "*",
     "larapack/dd": "^1.1",
-    "ext-mysqli": "*"
+    "ext-mysqli": "*",
+    "phpmailer/phpmailer": "^6.5"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "^3.6.0",

@@ -36,15 +36,17 @@ function tclievelde_enqueue_scripts()
         tclievelde_get_version(sprintf($mainJsPath, get_template_directory())),
         true
     );
-    wp_enqueue_script('news', sprintf('%s/assets/js/bundles/news.bundle.js', get_template_directory_uri()), null, '0.0.1', true);
-    if (get_post_type() === 'page' && get_page_uri() === 'wedstrijden') {
-        wp_enqueue_script('activeplayers', sprintf('%s/assets/js/bundles/activeplayers.bundle.js', get_template_directory_uri()), null, '0.0.1', true);
-    }
     if (get_post_type() === 'page' && get_page_uri() === 'leden') {
         wp_enqueue_script('uploads', sprintf('%s/assets/js/bundles/uploads.bundle.js', get_template_directory_uri()), null, '0.0.1', true);
     }
     if (get_post_type() === 'page' && get_page_uri() === 'competitie') {
         wp_enqueue_script('competition', sprintf('%s/assets/js/bundles/competition.bundle.js', get_template_directory_uri()), null, '0.0.1', true);
+    }
+    if (get_page_uri() === 'actueel') {
+        wp_enqueue_script('news', sprintf('%s/assets/js/bundles/news.bundle.js', get_template_directory_uri()), null, '0.0.1', true);
+    }
+    if (get_page_uri() === 'reserveren' || get_page_uri() === 'reservering') {
+        wp_enqueue_script('activeplayers', sprintf('%s/assets/js/bundles/activeplayers.bundle.js', get_template_directory_uri()), null, '0.0.1', true);
     }
 }
 /**

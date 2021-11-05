@@ -7,7 +7,7 @@ const bundlesConfig = {
         'activeplayers': './web/app/themes/tclievelde/assets/js/activeplayers.js',
         'uploads': './web/app/themes/tclievelde/assets/js/uploads.js',
         'competition': './web/app/themes/tclievelde/assets/js/competition.js',
-        'news': './web/app/themes/tclievelde/assets/js/news.js'
+        'news': './web/app/themes/tclievelde/assets/js/news.js',
     },
     mode: 'development',
     output: {

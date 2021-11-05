@@ -1,5 +1,4 @@
-
-        <div class="c-footer__background">
+ <div class="c-footer__background">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-7 col-20">
@@ -43,6 +42,3 @@
 </html>
 
 <?php wp_footer(); ?>
-<script>
-    Tclievelde.setActiveLink();
-</script>

@@ -50,14 +50,14 @@ option, select {
   justify-content: space-between;
   flex-wrap: wrap;
 
-  .c-match__single-player-wij, .c-match__single-player-zij {
+  .c-match__single-player {
     padding: 10px;
     border: 3px solid #35748a;
     background-color: $gray;
     margin: 0 20px;
     cursor: pointer;
 
-    &.active-player-wij, &.active-player-zij {
+    &.active-player {
       background-color: $gray-darker;
       font-weight: bold;
 
@@ -100,7 +100,7 @@ option, select {
     grid-template-columns: repeat(3, 1fr);
   }
 
-  .c-match__single-player-wij, .c-match__single-player-zij {
+  .c-match__single-player {
     margin: 5px 0 !important;
   }
 
