@@ -95,6 +95,11 @@ option, select {
   }
 }
 
+.no-deselect {
+  background-color: #c9c9c9;
+  font-weight: bold;
+}
+
 @include media-breakpoint-down(md) {
   .c-match__wrapper {
     grid-template-columns: repeat(3, 1fr);

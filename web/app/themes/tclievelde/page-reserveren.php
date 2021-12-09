@@ -4,6 +4,7 @@ use Tclievelde\Tclievelde;
 
 $newreservation = false;
 $errmsg = '';
+$availability = '';
 
 $cookieuser = $_COOKIE["user"];
 $user = Tclievelde::getData("SELECT * FROM users WHERE md5(gebruikersnaam)='$cookieuser'");
@@ -13,11 +14,12 @@ $reserveringen = Tclievelde::getData("SELECT * FROM reserveringen");
 
 if (isset($_GET['newreservation'])) {
     $res = Tclievelde::getData("SELECT * FROM reserveringen");
-    if($res->num_rows > 0) {
+    if ($res->num_rows > 0) {
         while ($rest = $res->fetch_assoc()) {
-            if ($user['voornaam'].' - '.$user['lidnummer'] !== $rest['Lidnummer'] && $user['voornaam'].' - '.$user['lidnummer'] !== $rest['Medespeler1'] && $user['voornaam'].' - '.$user['lidnummer'] !== $rest['Medespeler2'] && $user['voornaam'].' - '.$user['lidnummer'] !== $rest['Medespeler3']) {
+            if ($user['voornaam'].'-'.$user['lidnummer'] !== $rest['Lidnummer'] && $user['voornaam'].'-'.$user['lidnummer'] !== $rest['Medespeler1'] && $user['voornaam'].'-'.$user['lidnummer'] !== $rest['Medespeler2'] && $user['voornaam'].'-'.$user['lidnummer'] !== $rest['Medespeler3']) {
                 $newreservation = true;
             } else {
+                $newreservation = false;
                 $errmsg = 'U kunt maar 1 keer reserveren';
             }
         }
@@ -34,27 +36,50 @@ if (isset($_POST['aanmaken'])) {
     if ($lidnummer !== 0) {
         $lidnummer = Tclievelde::getData("SELECT * FROM users WHERE '$lidnummer' = users.gebruikersnaam");
         $lidnummer = $lidnummer->fetch_assoc();
-        $lidnummer = $lidnummer['voornaam'].' - '.$lidnummer['lidnummer'];
+        $lidnummer = $lidnummer['voornaam'].'-'.$lidnummer['lidnummer'];
     }
     $medespeler1 = $_POST['speler2'] ?? 0;
     if ($medespeler1 !== 0) {
         $medespeler1 = Tclievelde::getData("SELECT * FROM users WHERE '$medespeler1' = users.gebruikersnaam");
         $medespeler1 = $medespeler1->fetch_assoc();
-        $medespeler1 = $medespeler1['voornaam'].' - '.$medespeler1['lidnummer'];
+        $medespeler1 = $medespeler1['voornaam'].'-'.$medespeler1['lidnummer'];
     }
     $medespeler2 = $_POST['speler3'] ?? 0;
     if ($medespeler2 !== 0) {
         $medespeler2 = Tclievelde::getData("SELECT * FROM users WHERE '$medespeler2' = users.gebruikersnaam");
         $medespeler2 = $medespeler2->fetch_assoc();
-        $medespeler2 = $medespeler2['voornaam'].' - '.$medespeler2['lidnummer'];
+        $medespeler2 = $medespeler2['voornaam'].'-'.$medespeler2['lidnummer'];
     }
     $medespeler3 = $_POST['speler4'] ?? 0;
     if ($medespeler3 !== 0) {
         $medespeler3 = Tclievelde::getData("SELECT * FROM users WHERE '$medespeler3' = users.gebruikersnaam");
         $medespeler3 = $medespeler3->fetch_assoc();
-        $medespeler3 = $medespeler3['voornaam'].' - '.$medespeler3['lidnummer'];
+        $medespeler3 = $medespeler3['voornaam'].'-'.$medespeler3['lidnummer'];
     }
-    $insert = Tclievelde::insertData("INSERT INTO reserveringen (Lidnummer, Baan, Medespeler1, Medespeler2, Medespeler3, Datum, Tijd) VALUES ('$lidnummer', '$baan', '$medespeler1', '$medespeler2', '$medespeler3', '$datum', '$tijd')");
+    $lidn1 = Tclievelde::getData("SELECT Medespeler1 FROM reserveringen WHERE Medespeler1 = '$lidnummer'");
+    $lidn2 = Tclievelde::getData("SELECT Medespeler2 FROM reserveringen WHERE Medespeler2 = '$lidnummer'");
+    $lidn3 = Tclievelde::getData("SELECT Medespeler3 FROM reserveringen WHERE Medespeler3 = '$lidnummer'");
+    $m11 = Tclievelde::getData("SELECT * FROM reserveringen WHERE Medespeler1 = '$medespeler1'");
+    $m12 = Tclievelde::getData("SELECT * FROM reserveringen WHERE Medespeler1 = '$medespeler2'");
+    $m13 = Tclievelde::getData("SELECT * FROM reserveringen WHERE Medespeler1 = '$medespeler3'");
+    $m21 = Tclievelde::getData("SELECT * FROM reserveringen WHERE Medespeler2 = '$medespeler1'");
+    $m22 = Tclievelde::getData("SELECT * FROM reserveringen WHERE Medespeler2 = '$medespeler2'");
+    $m23 = Tclievelde::getData("SELECT * FROM reserveringen WHERE Medespeler2 = '$medespeler3'");
+    $m31 = Tclievelde::getData("SELECT * FROM reserveringen WHERE Medespeler3 = '$medespeler1'");
+    $m32 = Tclievelde::getData("SELECT * FROM reserveringen WHERE Medespeler3 = '$medespeler2'");
+    $m33 = Tclievelde::getData("SELECT * FROM reserveringen WHERE Medespeler3 = '$medespeler3'");
+    $allreserveringlidnummers = Tclievelde::getData("SELECT Lidnummer FROM reserveringen");
+    if ($medespeler1 !== 0) {
+        $availability = checkPlayerAvailability($lidn1, $lidn2, $lidn3, $lidnummer, $m11, $m12, $m13, $m21, $m22, $m23, $m31, $m32, $m33, $medespeler1, $medespeler2, $medespeler3, $allreserveringlidnummers, null);
+    } else if ($medespeler2 !== 0) {
+        $availability = checkPlayerAvailability($lidn1, $lidn2, $lidn3, $lidnummer, $m11, $m12, $m13, $m21, $m22, $m23, $m31, $m32, $m33, $medespeler1, $medespeler2, $medespeler3, $allreserveringlidnummers, null);
+    } else if ($medespeler3 !== 0) {
+        $availability = checkPlayerAvailability($lidn1, $lidn2, $lidn3, $lidnummer, $m11, $m12, $m13, $m21, $m22, $m23, $m31, $m32, $m33, $medespeler1, $medespeler2, $medespeler3, $allreserveringlidnummers, null);
+    }
+    if (!$availability) {
+        $insert = Tclievelde::insertData("INSERT INTO reserveringen (Lidnummer, Baan, Medespeler1, Medespeler2, Medespeler3, Datum, Tijd) VALUES ('$lidnummer', '$baan', '$medespeler1', '$medespeler2', '$medespeler3', '$datum', '$tijd')");
+        header('location: /reserveren');
+    }
 }
 
 get_header();
@@ -205,7 +230,9 @@ require 'page.php';
                 </div>
             <?php } if ($errmsg) {
                 echo '<p class="c-error__msg">'.$errmsg.'</p>';
-            } ?>
+            } if ($availability) {
+                echo '<p class="c-error__msg">'.$availability.'</p>';
+            }?>
         </div>
     </div>
 </div>
