@@ -58,7 +58,14 @@ window.onload = function () {
         // Then loop through the active players
         for (let i=0; i<allplayers.length; i++) {
             const el = activeplayers.appendChild(document.createElement('input'));
-            el.name = 'speler'+[i+1]
+            let windowLocation = window.location.href.split('?')
+            for (let x=0; x<windowLocation.length; x++) {
+                if (windowLocation[x] === 'newreservation') {
+                    el.name = 'speler'+[i+1]
+                } else {
+                    el.name = 'speler'+[i+2]
+                }
+            }
             el.value = allplayers[i].textContent.replaceAll(' ', '');
             el.readOnly = true
         }
