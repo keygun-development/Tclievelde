@@ -3,10 +3,10 @@
 namespace Tclievelde\helpers;
 
 /**
- * Trait NewExpression
+ * Trait newExpression
  * @package Tclievelde\helpers
  */
-trait NewExpression
+trait newExpression
 {
     /**
      * @param mixed ...$arguments

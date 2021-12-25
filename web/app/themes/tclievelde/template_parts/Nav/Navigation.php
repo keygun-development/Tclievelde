@@ -3,11 +3,11 @@
 namespace Tclievelde\Theme\TemplateParts\Nav;
 
 use Tclievelde\helpers\DisplaysView;
-use Tclievelde\helpers\NewExpression;
+use Tclievelde\helpers\newExpression;
 
 class Navigation
 {
-    use NewExpression,
+    use newExpression,
         DisplaysView;
 
     /**

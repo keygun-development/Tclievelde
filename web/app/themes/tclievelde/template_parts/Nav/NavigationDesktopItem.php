@@ -4,7 +4,7 @@
 namespace Tclievelde\Theme\TemplateParts\Nav;
 
 use Tclievelde\helpers\DisplaysView;
-use Tclievelde\helpers\NewExpression;
+use Tclievelde\helpers\newExpression;
 
 /**
  * Class NavigationDesktopItem
