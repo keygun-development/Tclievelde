@@ -7,7 +7,7 @@ use Tclievelde\helpers\NewExpression;
 
 class Navigation
 {
-    use newExpression,
+    use NewExpression,
         DisplaysView;
 
     /**
