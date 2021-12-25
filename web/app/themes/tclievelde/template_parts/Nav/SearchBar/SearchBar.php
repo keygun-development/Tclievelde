@@ -4,7 +4,7 @@
 namespace Tclievelde\Theme\TemplateParts\Nav\SearchBar;
 
 use Tclievelde\helpers\DisplaysView;
-use Tclievelde\helpers\newExpression;
+use Tclievelde\helpers\NewExpression;
 
 /**
  * Class SearchBar
@@ -12,7 +12,7 @@ use Tclievelde\helpers\newExpression;
  */
 abstract class SearchBar
 {
-    use newExpression,
+    use NewExpression,
         DisplaysView;
 
     /**

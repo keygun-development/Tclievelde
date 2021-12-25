@@ -4,7 +4,7 @@
 namespace Tclievelde\Theme\TemplateParts\Nav;
 
 use Tclievelde\helpers\DisplaysView;
-use Tclievelde\helpers\newExpression;
+use Tclievelde\helpers\NewExpression;
 
 /**
  * Class NavigationItem
@@ -12,7 +12,7 @@ use Tclievelde\helpers\newExpression;
  */
 class NavigationItem
 {
-    use newExpression,
+    use NewExpression,
         DisplaysView;
 
     /**

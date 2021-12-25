@@ -3,7 +3,7 @@
 namespace Tclievelde\helpers;
 
 /**
- * Trait newExpression
+ * Trait NewExpression
  * @package Tclievelde\helpers
  */
 trait NewExpression
