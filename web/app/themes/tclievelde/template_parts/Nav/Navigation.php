@@ -3,7 +3,7 @@
 namespace Tclievelde\Theme\TemplateParts\Nav;
 
 use Tclievelde\helpers\DisplaysView;
-use Tclievelde\helpers\newExpression;
+use Tclievelde\helpers\NewExpression;
 
 class Navigation
 {
