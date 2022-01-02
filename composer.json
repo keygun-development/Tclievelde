@@ -28,6 +28,18 @@
       "type": "composer",
       "url": "https://wpackagist.org",
       "only": ["wpackagist-plugin/*", "wpackagist-theme/*"]
+    },
+    {
+      "type": "package",
+      "package": {
+        "name": "advanced-custom-fields/advanced-custom-fields-pro",
+        "version": "5.10.1",
+        "type": "wordpress-muplugin",
+        "dist": {
+          "type": "zip",
+          "url": "https://connect.advancedcustomfields.com/index.php?a=download&p=pro&k=b3JkZXJfaWQ9MTY5NTAxfHR5cGU9ZGV2ZWxvcGVyfGRhdGU9MjAxOS0wOS0wNSAwOTo0OToxMA=="
+        }
+      }
     }
   ],
   "require": {
@@ -44,7 +56,8 @@
     "ext-json": "*",
     "larapack/dd": "^1.1",
     "ext-mysqli": "*",
-    "phpmailer/phpmailer": "^6.5"
+    "phpmailer/phpmailer": "^6.5",
+    "advanced-custom-fields/advanced-custom-fields-pro": "^5.4.1"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "^3.6.0",
