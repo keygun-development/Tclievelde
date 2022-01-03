@@ -11,7 +11,7 @@ $params = [
 $articles = 0;
 
 $recent_articles = wp_get_recent_posts($params, 'OBJECT');
-dd($recent_articles);
+
 foreach ($recent_articles as $article) {
     if (!empty(get_post_field('afbeelding', $article))) {
         $articles++;
