@@ -13,7 +13,7 @@ if (isset($_COOKIE['user'])) {
         <div class="row justify-content-between">
             <div class="col-10">
                 <h1>
-                    <?php echo get_the_title(); ?>
+                    <?php echo get_the_title(); ?> bla
                 </h1>
                 <?php
                 if (get_page_uri() == 'reserveren') {
