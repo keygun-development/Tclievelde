@@ -15,6 +15,7 @@ $recent_articles = wp_get_recent_posts($params, 'OBJECT');
 foreach ($recent_articles as $article) {
     if (!empty(get_post_field('afbeelding', $article))) {
         $articles++;
+        echo 'test';
         ?>
         <div class="<?php if ($articles % 2 == 0) {
             echo "bg-blue";
