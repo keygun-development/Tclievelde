@@ -2,6 +2,7 @@
 get_header();
 
 require 'page.php';
+echo 'test';
 
 $params = [
     'numberposts' => 10,
