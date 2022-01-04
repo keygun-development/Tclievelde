@@ -13,7 +13,7 @@ $articles = 0;
 $recent_articles = wp_get_recent_posts($params, 'OBJECT');
 
 foreach ($recent_articles as $article) {
-    if (!empty(get_post_field('afbeelding', $article))) {
+//    if (!empty(get_post_field('afbeelding', $article))) {
         $articles++;
         echo 'test';
         ?>
@@ -39,7 +39,7 @@ foreach ($recent_articles as $article) {
             </div>
         </div>
         <?php
-    }
+//    }
 }
 ?>
 <?php
