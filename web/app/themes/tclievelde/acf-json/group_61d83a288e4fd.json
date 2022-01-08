@@ -1,0 +1,44 @@
+{
+    "key": "group_61d83a288e4fd",
+    "title": "Artikel",
+    "fields": [
+        {
+            "key": "field_61d83a2d10593",
+            "label": "Bekijk artikel tekst",
+            "name": "show_article_text",
+            "type": "text",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "Bekijk hier het artikel",
+            "placeholder": "",
+            "prepend": "",
+            "append": "",
+            "maxlength": 50
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "post"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "show_in_rest": 0,
+    "modified": 1641560722
+}

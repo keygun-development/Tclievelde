@@ -1,6 +1,15 @@
 .c-footer__background {
-  background-color: #335d61;
+  background-color: #021d26;
   padding: 50px;
+
+  p, a {
+    color: #808a94 !important;
+    transition: .3s;
+
+    &:hover {
+      color: #fff !important;
+    }
+  }
 }
 
 .title--footer {
@@ -8,8 +17,6 @@
   display: inline-block;
   font-size: 1.25rem;
   font-weight: bold;
-  text-transform: uppercase;
-  border-bottom: 3px solid #538493;
 }
 
 .menu {

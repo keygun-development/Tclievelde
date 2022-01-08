@@ -11,7 +11,11 @@ if (isset($_COOKIE['user'])) {
 <div class="bg-blue">
     <div class="container section">
         <div class="row justify-content-between">
-            <div class="col-10">
+            <div class="<?php if (!empty(get_the_post_thumbnail())) {
+                ?>col-10 <?php
+                        } else {
+                            echo 'col-20';
+                        } ?>">
                 <h1>
                     <?php echo get_the_title(); ?>
                 </h1>
@@ -21,14 +25,14 @@ if (isset($_COOKIE['user'])) {
                 }
                 ?>
                 <p>
-                    <?php echo get_field('tekst'); ?>
+                    <?php the_content(); ?>
                 </p>
             </div>
+            <?php if (!empty(get_the_post_thumbnail())) { ?>
             <div class="col-6 ml-4">
-                <?php if (!empty(get_field('afbeelding'))) { ?>
-                    <img src="<?php echo get_field('afbeelding')['url']; ?>" />
-                <?php } ?>
+                <img src="<?php echo get_the_post_thumbnail_url(); ?>" />
             </div>
+            <?php } ?>
         </div>
     </div>
 </div>

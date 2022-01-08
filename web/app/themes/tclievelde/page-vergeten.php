@@ -45,6 +45,7 @@ if (isset($_POST['submit'])) {
 
             $mailback->send();
         } catch (Exception $e) {
+            dd($e);
             echo "Message kon niet worden verzonden. Error: {$mail->ErrorInfo}. Probeer het opnieuw of vraag de beheerder om hulp keaganmulder1@gmail.com";
         }
     }

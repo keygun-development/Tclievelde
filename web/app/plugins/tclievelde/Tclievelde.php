@@ -83,8 +83,8 @@ class Tclievelde
     public static function getUser($username, $password)
     {
         $mysqli = self::dbConnect();
-        $user = $mysqli->query("SELECT * FROM users WHERE gebruikersnaam = '$username' AND wachtwoord = '$password'");
-        $usern = $mysqli->query("SELECT * FROM users WHERE gebruikersnaam = '$username'");
+        $user = $mysqli->query("SELECT * FROM users WHERE email = '$username' AND wachtwoord = '$password'");
+        $usern = $mysqli->query("SELECT * FROM users WHERE email = '$username'");
         $passw = $mysqli->query("SELECT * FROM users WHERE wachtwoord = '$password'");
         if ($usern->num_rows == 0) {
             return "Deze gebruiker bestaat niet.";

@@ -1,0 +1,19 @@
+.c-pagination {
+  padding: 20px;
+
+  .page-numbers {
+    padding: 5px 10px;
+    background-color: $white;
+    border: 1px solid $lightBlue;
+  }
+
+  .next, .page-numbers:last-child {
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
+  .prev, .page-numbers:first-child {
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+}

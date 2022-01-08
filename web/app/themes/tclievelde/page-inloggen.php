@@ -23,19 +23,11 @@ require 'page.php';
                 Wachtwoord:
             </p>
             <input name="wachtwoord" type="password" />
-            <input type="submit" class="c-button__primary mt-5" name="inloggen" value="Verzenden" />
+            <input type="submit" class="wp-block-button__link has-background mt-5" name="inloggen" value="Verzenden" style="background-color:#46c5f1" />
         </form>
         <?php if ($error) {
             echo '<p class="c-error__msg">'.$error.'</p>';
         } ?>
-        <div class="col-10 mt-4">
-            <p>
-                Bent u uw gebruikersnaam of wachtwoord vergeten? Of komt u hier voor de eerste keer en u had al een account? Klik dan hieronder om uw toegang terug te krijgen.
-            </p>
-            <a class="c-button__primary col-4" href="/vergeten">
-                Vergeten
-            </a>
-        </div>
     </div>
 </div>
 <?php
