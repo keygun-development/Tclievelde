@@ -83,6 +83,7 @@ class Tclievelde
     public static function getUser($username, $password)
     {
         $mysqli = self::dbConnect();
+        dd($mysqli);
         $user = $mysqli->query("SELECT * FROM users WHERE email = '$username' AND wachtwoord = '$password'");
         $usern = $mysqli->query("SELECT * FROM users WHERE email = '$username'");
         $passw = $mysqli->query("SELECT * FROM users WHERE wachtwoord = '$password'");
