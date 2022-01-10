@@ -16,6 +16,8 @@ if (isset($_POST['submit'])) {
     if ($getuser !== 'Er bestaat geen gebruiker met dit emailadres') {
         $email = md5($getuser['email']);
         $pass = md5($getuser['wachtwoord']);
+        $site = $_ENV['GMAIL_SITE'];
+        dd($site);
         try {
             //Server settings
             $mailback->isSMTP();
@@ -34,14 +36,14 @@ if (isset($_POST['submit'])) {
             //Content
             $mailback->isHTML(true);
             $mailback->Subject = 'Wachtwoord resetten voor Tclievelde';
-            $mailback->Body    = "
+            $mailback->Body    = '
                 <p>Geachte heer/vrouw,</p>
                 <p>Volgens ons systeem probeert u uw wachtwoord te resetten. Als dat niet zo is dan probeert iemand in uw account te komen. Neem dan contact met ons op.</p>
                 <p>Via onderstaande link kunt u uw wachtwoord resetten:</p>
-                <a href='https://tclievelde.dev/reset?key=".$email."&reset=".$pass."' style='text-decoration: none; padding: 10px 25px; background-color: #46c5f1; border-radius: 4%; color: #fff; font-weight: 700; border: none;'>Resetten</a>
+                <a href="https://'.$site.'/reset?key='.$email.'&reset='.$pass.'" style="text-decoration: none; padding: 10px 25px; background-color: #46c5f1; border-radius: 4%; color: #fff; font-weight: 700; border: none;">Resetten</a>
                 <p>Met vriendelijke groet,</p>
                 <p>Tclievelde</p>
-                ";
+                ';
 
             $mailback->send();
         } catch (Exception $e) {
