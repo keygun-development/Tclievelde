@@ -17,7 +17,6 @@ if (isset($_POST['submit'])) {
         $email = md5($getuser['email']);
         $pass = md5($getuser['wachtwoord']);
         $site = $_ENV['GMAIL_SITE'];
-        dd($site);
         try {
             //Server settings
             $mailback->isSMTP();
