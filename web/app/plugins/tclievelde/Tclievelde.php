@@ -49,7 +49,7 @@ class Tclievelde
      */
     public static function dbConnect(): mysqli
     {
-        $mysqli = new mysqli('192.168.10.10', $_ENV['DB_USER'], $_ENV['DB_PASSWORD'], $_ENV['DB_NAME']);
+        $mysqli = new mysqli($_ENV['DB_HOST'], $_ENV['DB_USER'], $_ENV['DB_PASSWORD'], $_ENV['DB_NAME']);
         return $mysqli;
     }
 
@@ -83,7 +83,6 @@ class Tclievelde
     public static function getUser($username, $password)
     {
         $mysqli = self::dbConnect();
-        dd($mysqli);
         $user = $mysqli->query("SELECT * FROM users WHERE email = '$username' AND wachtwoord = '$password'");
         $usern = $mysqli->query("SELECT * FROM users WHERE email = '$username'");
         $passw = $mysqli->query("SELECT * FROM users WHERE wachtwoord = '$password'");
