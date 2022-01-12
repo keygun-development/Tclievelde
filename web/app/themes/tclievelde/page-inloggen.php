@@ -2,6 +2,10 @@
 
     use Tclievelde\Tclievelde;
 
+if (isset($_COOKIE['user'])) {
+    header('location: /reserveren');
+}
+
 if (isset($_POST['inloggen'])) {
     $username = $_POST['gebruikersnaam'];
     $wachtwoord = $_POST['wachtwoord'];

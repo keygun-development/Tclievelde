@@ -14,8 +14,8 @@ if (isset($_POST['submit'])) {
     $getuser = Tclievelde::getUserFromEmail($sender);
     $loader = true;
     if ($getuser !== 'Er bestaat geen gebruiker met dit emailadres') {
-        $email = md5($getuser['email']);
-        $pass = md5($getuser['wachtwoord']);
+        $email = $getuser['user_email'];
+        $pass = $getuser['user_pass'];
         $site = $_ENV['GMAIL_SITE'];
         try {
             //Server settings

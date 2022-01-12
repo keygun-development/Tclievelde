@@ -71,7 +71,7 @@ class Tclievelde
     public static function getUserFromEmail($email)
     {
         $mysqli = self::dbConnect();
-        $user = $mysqli->query("SELECT * FROM users WHERE email = '$email'");
+        $user = $mysqli->query("SELECT * FROM wp_users WHERE user_email = '$email'");
         if ($user->num_rows > 0) {
             $user = $user->fetch_assoc();
             return $user;
@@ -82,24 +82,20 @@ class Tclievelde
 
     public static function getUser($username, $password)
     {
-        $mysqli = self::dbConnect();
-        $user = $mysqli->query("SELECT * FROM users WHERE email = '$username' AND wachtwoord = '$password'");
-        $usern = $mysqli->query("SELECT * FROM users WHERE email = '$username'");
-        $passw = $mysqli->query("SELECT * FROM users WHERE wachtwoord = '$password'");
-        if ($usern->num_rows == 0) {
-            return "Deze gebruiker bestaat niet.";
-        } else if ($passw->num_rows == 0) {
-            return "Het wachtwoord voor deze gebruiker komt niet overeen";
-        }
-        if ($user->num_rows > 0) {
-            while ($row = $user->fetch_assoc()) {
-                $_SESSION['user'] = $row;
-                setcookie('user', md5($_SESSION['user']['gebruikersnaam']), time() + (86400 * 30), '/');
-                header("location: /");
-                exit;
-            }
-            session_start();
+        $user = wp_authenticate_username_password(null, $username, $password);
+        if (!$user->has_errors()) {
+            setcookie('user', md5($user->user_login), time() + (86400 * 30), '/');
+            header("location: /");
             return $user;
+        } else {
+            $user = wp_authenticate_email_password(null, $username, $password);
+            if ($user->has_errors()) {
+                return $user->get_error_message();
+            } else {
+                setcookie('user', md5($user->user_login), time() + (86400 * 30), '/');
+                header("location: /");
+                return $user;
+            }
         }
     }
 

@@ -1,6 +1,6 @@
 <?php
 
-class Proa_Technique extends Proa_Post
+class Proa_Reservation extends Proa_Post
 {
 
 	/**

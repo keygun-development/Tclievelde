@@ -9,7 +9,7 @@ class QueryTransformRegistry
         QueryTransform::builder()
             ->whenMainQuery()
             ->whenArchive()
-            ->whenPostType(Proa_Technique::getIdentifier())
+            ->whenPostType(Proa_Reservation::getIdentifier())
             ->when(fn() => ($_GET['tech'] ?? '*') === '*')
             ->postsPerPage(($_GET['tech'] ?? false) ? 6 : 9)
             ->build();
@@ -17,7 +17,7 @@ class QueryTransformRegistry
         QueryTransform::builder()
             ->whenMainQuery()
             ->whenArchive()
-            ->whenPostType(Proa_Technique::getIdentifier())
+            ->whenPostType(Proa_Reservation::getIdentifier())
             ->when(fn() => ($_GET['tech'] ?? '*') !== '*')
             ->postsPerPage(($_GET['tech'] ?? false) ? 6 : 9)
             ->build();

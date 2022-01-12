@@ -6,9 +6,13 @@ $newreservation = false;
 $errmsg = '';
 $availability = '';
 
-$cookieuser = $_COOKIE["user"];
-$user = Tclievelde::getData("SELECT * FROM users WHERE md5(gebruikersnaam)='$cookieuser'");
-$user = $user->fetch_assoc();
+if (isset($_COOKIE['user'])) {
+    $cookieuser = $_COOKIE["user"];
+    $user = Tclievelde::getData("SELECT * FROM wp_users WHERE md5(user_login)='$cookieuser'");
+    $user = $user->fetch_assoc();
+} else {
+    header('location: /inloggen');
+}
 
 $reserveringen = Tclievelde::getData("SELECT * FROM reserveringen");
 

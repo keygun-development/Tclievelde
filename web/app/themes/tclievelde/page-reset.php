@@ -13,7 +13,10 @@ if (isset($_POST['submit_password'])) {
     } else if (strlen($pass1) < 7) {
         $error = 'Uw wachtwoord moet minimaal 7 tekens bevatten';
     } else {
-        Tclievelde::insertData("UPDATE users SET wachtwoord='$pass1' WHERE email='$email'");
+        $pass = $_GET['reset'];
+        $getuser = Tclievelde::getData("SELECT * FROM wp_users WHERE user_email ='$email' AND user_pass = '$pass'");
+        $getuser = $getuser->fetch_assoc();
+        wp_set_password($pass1, $getuser['ID']);
         header('location: /inloggen');
     }
 }
@@ -21,7 +24,7 @@ if (isset($_POST['submit_password'])) {
 if ($_GET['key'] && $_GET['reset']) {
     $email = $_GET['key'];
     $pass = $_GET['reset'];
-    $getuser = Tclievelde::getData("SELECT email,wachtwoord FROM users where md5(email)='$email' and md5(wachtwoord)='$pass'");
+    $getuser = Tclievelde::getData("SELECT * FROM wp_users WHERE user_email ='$email' AND user_pass = '$pass'");
     if ($getuser->num_rows > 0) {
         get_header();
         require 'page.php';
@@ -29,7 +32,7 @@ if ($_GET['key'] && $_GET['reset']) {
         <div class="bg-blue">
             <div class="container section">
                 <form class="col-6" method="post">
-                    <input type="hidden" name="email" value="<?php print_r($getuser->fetch_assoc()['email']);?>">
+                    <input type="hidden" name="email" value="<?php print_r($getuser->fetch_assoc()['user_email']);?>">
                     <p>Nieuw wachtwoord:</p>
                     <input id="password1" type="password" name='password1' required>
                     <p>Herhaal wachtwoord:</p>

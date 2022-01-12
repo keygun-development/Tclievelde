@@ -20,17 +20,17 @@ require_once __DIR__ . '/functions/api/class-proa-searcher.php';
 require_once __DIR__ . '/functions/api/class-proa-suggestion-searcher.php';
 
 /** Base Proa_Object which other Proa_* objects can extends. */
-require_once __DIR__. '/functions/core/class-proa-base-properties.php';
-require_once __DIR__.'/functions/core/class-proa-retrievable-object.php';
-require_once __DIR__.'/functions/core/class-proa-object.php';
-require_once __DIR__.'/functions/core/class-proa-post-abstract.php';
-require_once __DIR__.'/functions/core/class-proa-term-abstract.php';
+require_once __DIR__ . '/functions/core/class-proa-base-properties.php';
+require_once __DIR__ . '/functions/core/class-proa-retrievable-object.php';
+require_once __DIR__ . '/functions/core/class-proa-object.php';
+require_once __DIR__ . '/functions/core/class-proa-post-abstract.php';
+require_once __DIR__ . '/functions/core/class-proa-term-abstract.php';
 
 /** Custom post types */
-require_once __DIR__ . '/functions/custom-post-types/technique.php';
+require_once __DIR__ . '/functions/custom-post-types/reservation.php';
 
 require_once __DIR__ . '/functions/custom-post-types/class-proa-post.php';
-require_once __DIR__ . '/functions/custom-post-types/class-proa-technique.php';
+require_once __DIR__ . '/functions/custom-post-types/class-proa-reservation.php';
 
 /** Defines custom image sizes for the theme. */
 require_once __DIR__ . '/functions/image-sizes.php';
