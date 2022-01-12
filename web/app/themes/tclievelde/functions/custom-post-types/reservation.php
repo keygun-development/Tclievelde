@@ -131,6 +131,15 @@ function proa_register_reservation_fields()
                 ],
             ],
         ],
+        "location" => [
+            [
+                [
+                    "param" => "post_type",
+                    "operator" => "==",
+                    "value" => "reservation",
+                ],
+            ],
+        ],
         "menu_order" => 0,
         "position" => "normal",
         "style" => "default",
