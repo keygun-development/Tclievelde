@@ -32,6 +32,8 @@ require_once __DIR__ . '/functions/custom-post-types/reservation.php';
 require_once __DIR__ . '/functions/custom-post-types/class-proa-post.php';
 require_once __DIR__ . '/functions/custom-post-types/class-proa-reservation.php';
 
+require_once __DIR__ . '/functions/custom-users/users.php';
+
 /** Defines custom image sizes for the theme. */
 require_once __DIR__ . '/functions/image-sizes.php';
 

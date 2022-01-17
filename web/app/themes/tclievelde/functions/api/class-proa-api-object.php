@@ -1,5 +1,7 @@
 <?php
 
+namespace functions\api;
+
 /**
  * Interface Proa_API_Object
  *

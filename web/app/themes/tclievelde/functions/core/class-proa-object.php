@@ -1,27 +1,33 @@
 <?php
 
+namespace functions\core;
+
+use Generator;
+use WP_Post;
+use WP_Query;
+
 /**
  * Class Proa_Post
  */
 abstract class Proa_Object implements Proa_Base_Properties {
     use Proa_Retrievable_Object;
 
-	/**
-	 * @var object
-	 */
-	private object $wp_object;
+    /**
+     * @var object
+     */
+    private object $wp_object;
 
-	/**
-	 * @return string
-	 */
-	abstract static function getIdentifier(): string;
+    /**
+     * @return string
+     */
+    abstract static function getIdentifier(): string;
 
-	/**
-	 * @param WP_Post|WP_Term $wp_object
-	 *
-	 * @return static
-	 */
-	abstract static function parse( $wp_object ): self;
+    /**
+     * @param WP_Post|WP_Term $wp_object
+     *
+     * @return static
+     */
+    abstract static function parse( $wp_object ): self;
 
     /**
      * @param  array  $posts
@@ -54,9 +60,9 @@ abstract class Proa_Object implements Proa_Base_Properties {
      *
      * @return static[]
      */
-	public static function all(): array {
-		return static::findBy([], -1 );
-	}
+    public static function all(): array {
+        return static::findBy([], -1 );
+    }
 
     /**
      * Returns objects related to the current object.
@@ -92,47 +98,47 @@ abstract class Proa_Object implements Proa_Base_Properties {
         ]));
     }
 
-	/**
-	 * @param  string  $name
-	 * @param  array  $meta_query
-	 * @param  int  $limit
-	 * @return static[]
-	 */
+    /**
+     * @param  string  $name
+     * @param  array  $meta_query
+     * @param  int  $limit
+     * @return static[]
+     */
     public static function findByName( string $name, array $meta_query, int $limit = 6 ): array {
-		return static::parse_many(static::retrieve([
-			'name' => $name,
-		    'posts_per_page' => $limit,
-		    'post_type'      => static::getIdentifier(),
-		    'meta_query'     => $meta_query,
-	   	]));
-	}
+        return static::parse_many(static::retrieve([
+            'name' => $name,
+            'posts_per_page' => $limit,
+            'post_type'      => static::getIdentifier(),
+            'meta_query'     => $meta_query,
+        ]));
+    }
 
-	/**
-	 * @param  string  $slug
-	 * @param  array  $meta_query
-	 * @param  int  $limit
-	 * @return mixed
-	 */
-	public static function findBySlug( string $slug, array $meta_query, int $limit = 6 ): array {
-		return static::parse_many(static::retrieve([
-		    'slug' => $slug,
-		    'posts_per_page' => $limit,
-		    'post_type'      => static::getIdentifier(),
-		    'meta_query'     => $meta_query,
-	    ]));
-	}
+    /**
+     * @param  string  $slug
+     * @param  array  $meta_query
+     * @param  int  $limit
+     * @return mixed
+     */
+    public static function findBySlug( string $slug, array $meta_query, int $limit = 6 ): array {
+        return static::parse_many(static::retrieve([
+            'slug' => $slug,
+            'posts_per_page' => $limit,
+            'post_type'      => static::getIdentifier(),
+            'meta_query'     => $meta_query,
+        ]));
+    }
 
-	/**
-	 * @param  array  $meta_query
-	 * @return static[]
-	 */
-	public static function getRandomPostTypeObject( array $meta_query ): array {
-		return static::parse_many(static::retrieve([
-			'posts_per_page' => '1',
-		   	'meta_query'     => $meta_query,
-			'orderby'		 => 'rand'
-	   	]));
-	}
+    /**
+     * @param  array  $meta_query
+     * @return static[]
+     */
+    public static function getRandomPostTypeObject( array $meta_query ): array {
+        return static::parse_many(static::retrieve([
+            'posts_per_page' => '1',
+            'meta_query'     => $meta_query,
+            'orderby'		 => 'rand'
+        ]));
+    }
 
     /**
      * @param  string $title
@@ -172,23 +178,23 @@ abstract class Proa_Object implements Proa_Base_Properties {
         ]));
     }
 
-	/**
-	 * @return object
-	 */
-	public function getWPObject(): object {
-		return $this->wp_object;
-	}
+    /**
+     * @return object
+     */
+    public function getWPObject(): object {
+        return $this->wp_object;
+    }
 
-	/**
-	 * @param object $wp_object
-	 *
-	 * @return $this
-	 */
-	public function setWPObject( $wp_object ): self {
-		$this->wp_object = $wp_object;
+    /**
+     * @param object $wp_object
+     *
+     * @return $this
+     */
+    public function setWPObject( $wp_object ): self {
+        $this->wp_object = $wp_object;
 
-		return $this;
-	}
+        return $this;
+    }
     /**
      * Returns the post content with HTML stripped out.
      *

@@ -89,13 +89,16 @@ class Tclievelde
             return $user;
         } else {
             $user = wp_authenticate_email_password(null, $username, $password);
-            if ($user->has_errors()) {
-                return $user->get_error_message();
-            } else {
-                setcookie('user', md5($user->user_login), time() + (86400 * 30), '/');
-                header("location: /");
-                return $user;
+            if ($user) {
+                if ($user->has_errors()) {
+                    return $user->get_error_message();
+                } else {
+                    setcookie('user', md5($user->user_login), time() + (86400 * 30), '/');
+                    header("location: /");
+                    return $user;
+                }
             }
+            return 'Sorry we konden geen match maken met het gebruikersnaam en wachtwoord.';
         }
     }
 

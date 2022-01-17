@@ -1,5 +1,7 @@
 <?php
 
+namespace functions\core;
+
 /**
  * Class Proa_Post_Abstract
  */

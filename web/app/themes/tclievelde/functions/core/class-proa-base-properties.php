@@ -1,5 +1,7 @@
 <?php
 
+namespace functions\core;
+
 interface Proa_Base_Properties {
 
     /**

@@ -1,10 +1,20 @@
 <?php
 
 use Tclievelde\Tclievelde;
+use functions\customposts\Proa_Reservation;
+
+$reservations = Proa_Reservation::findBy(
+    [
+        'orderby' => 'date',
+        'post_type' => 'reservation',
+    ],
+    $args['limit'] ?? null
+);
 
 $newreservation = false;
 $errmsg = '';
 $availability = '';
+$succes = '';
 
 if (isset($_COOKIE['user'])) {
     $cookieuser = $_COOKIE["user"];
@@ -14,19 +24,39 @@ if (isset($_COOKIE['user'])) {
     header('location: /inloggen');
 }
 
-$reserveringen = Tclievelde::getData("SELECT * FROM reserveringen");
-
 if (isset($_GET['newreservation'])) {
-    $res = Tclievelde::getData("SELECT * FROM reserveringen");
-    if ($res->num_rows > 0) {
-        while ($rest = $res->fetch_assoc()) {
-            if ($user['voornaam'].'-'.$user['lidnummer'] !== $rest['Lidnummer'] && $user['voornaam'].'-'.$user['lidnummer'] !== $rest['Medespeler1'] && $user['voornaam'].'-'.$user['lidnummer'] !== $rest['Medespeler2'] && $user['voornaam'].'-'.$user['lidnummer'] !== $rest['Medespeler3']) {
-                $newreservation = true;
-            } else {
-                $newreservation = false;
-                $errmsg = 'U kunt maar 1 keer reserveren';
+    $participantReservation = false;
+
+    foreach ($reservations as $reservation) {
+        foreach ($reservation->getAuthor() as $auth) {
+            if ($auth == $user['ID']) {
+                $participantReservation = true;
             }
         }
+    }
+
+    foreach ($reservations as $reservation) {
+        foreach ($reservation->getRelatedPlayers() as $participant) {
+            if (is_array($participant['reservation_participant'])) {
+                if ($participant['reservation_participant']['ID'] == $user['ID']) {
+                    $participantReservation = true;
+                }
+            }
+        }
+    }
+
+    foreach ($reservations as $reservation) {
+        foreach ($reservation->getRelatedPlayers() as $participant) {
+            if (is_array($participant['reservation_participant'])) {
+                if ($participant['reservation_participant']['ID'] == $user['ID']) {
+                    $participantReservation = true;
+                }
+            }
+        }
+    }
+
+    if ($participantReservation) {
+        $errmsg = 'U mag maar 1 keer reserveren.';
     } else {
         $newreservation = true;
     }
@@ -36,53 +66,133 @@ if (isset($_POST['aanmaken'])) {
     $baan = $_POST['baan'];
     $datum = date('d-m-Y', strtotime($_POST['date']));
     $tijd = $_POST['time'];
-    $lidnummer = $_POST['speler1'] ?? 0;
-    if ($lidnummer !== 0) {
-        $lidnummer = Tclievelde::getData("SELECT * FROM users WHERE '$lidnummer' = users.gebruikersnaam");
-        $lidnummer = $lidnummer->fetch_assoc();
-        $lidnummer = $lidnummer['voornaam'].'-'.$lidnummer['lidnummer'];
+    $lidnummer = $user['ID'];
+    $medespeler1 = $_POST['speler1Id'] ?? 0;
+    $medespeler2 = $_POST['speler2Id'] ?? 0;
+    $medespeler3 = $_POST['speler3Id'] ?? 0;
+    $medespeler1noId = $_POST['speler1'] ?? '';
+    $medespeler2noId = $_POST['speler2'] ?? '';
+    $medespeler3noId = $_POST['speler3'] ?? '';
+    $medespeler1Reservation = false;
+    $medespeler2Reservation = false;
+    $medespeler3Reservation = false;
+    $tijd = explode('-', $tijd);
+
+    if ($medespeler1 === 0) {
+        $errmsg = 'Kies minimaal 1 medespeler.';
     }
-    $medespeler1 = $_POST['speler2'] ?? 0;
+
+    if ($datum < date('d-m-Y')) {
+        $errmsg = 'U kunt niet in het verleden reserveren.';
+    }
+
+    if ($datum == date('d-m-Y') && $tijd[0] <= date('H:i')) {
+        $errmsg = 'U kunt niet in het verleden reserveren.';
+    }
+
+    if ($datum.' '.$tijd[0] <= date('d-m-Y H:i')) {
+        $errmsg = 'U kunt niet in het verleden reserveren.';
+    }
+
+    //Check where author
     if ($medespeler1 !== 0) {
-        $medespeler1 = Tclievelde::getData("SELECT * FROM users WHERE '$medespeler1' = users.gebruikersnaam");
-        $medespeler1 = $medespeler1->fetch_assoc();
-        $medespeler1 = $medespeler1['voornaam'].'-'.$medespeler1['lidnummer'];
+        foreach ($reservation->getAuthor() as $auth) {
+            if ($auth == $medespeler1) {
+                $medespeler1Reservation = true;
+            }
+        }
     }
-    $medespeler2 = $_POST['speler3'] ?? 0;
+
     if ($medespeler2 !== 0) {
-        $medespeler2 = Tclievelde::getData("SELECT * FROM users WHERE '$medespeler2' = users.gebruikersnaam");
-        $medespeler2 = $medespeler2->fetch_assoc();
-        $medespeler2 = $medespeler2['voornaam'].'-'.$medespeler2['lidnummer'];
+        foreach ($reservation->getAuthor() as $auth) {
+            if ($auth == $medespeler2) {
+                $medespeler2Reservation = true;
+            }
+        }
     }
-    $medespeler3 = $_POST['speler4'] ?? 0;
+
     if ($medespeler3 !== 0) {
-        $medespeler3 = Tclievelde::getData("SELECT * FROM users WHERE '$medespeler3' = users.gebruikersnaam");
-        $medespeler3 = $medespeler3->fetch_assoc();
-        $medespeler3 = $medespeler3['voornaam'].'-'.$medespeler3['lidnummer'];
+        foreach ($reservation->getAuthor() as $auth) {
+            if ($auth == $medespeler3) {
+                $medespeler3Reservation = true;
+            }
+        }
     }
-    $lidn1 = Tclievelde::getData("SELECT Medespeler1 FROM reserveringen WHERE Medespeler1 = '$lidnummer'");
-    $lidn2 = Tclievelde::getData("SELECT Medespeler2 FROM reserveringen WHERE Medespeler2 = '$lidnummer'");
-    $lidn3 = Tclievelde::getData("SELECT Medespeler3 FROM reserveringen WHERE Medespeler3 = '$lidnummer'");
-    $m11 = Tclievelde::getData("SELECT * FROM reserveringen WHERE Medespeler1 = '$medespeler1'");
-    $m12 = Tclievelde::getData("SELECT * FROM reserveringen WHERE Medespeler1 = '$medespeler2'");
-    $m13 = Tclievelde::getData("SELECT * FROM reserveringen WHERE Medespeler1 = '$medespeler3'");
-    $m21 = Tclievelde::getData("SELECT * FROM reserveringen WHERE Medespeler2 = '$medespeler1'");
-    $m22 = Tclievelde::getData("SELECT * FROM reserveringen WHERE Medespeler2 = '$medespeler2'");
-    $m23 = Tclievelde::getData("SELECT * FROM reserveringen WHERE Medespeler2 = '$medespeler3'");
-    $m31 = Tclievelde::getData("SELECT * FROM reserveringen WHERE Medespeler3 = '$medespeler1'");
-    $m32 = Tclievelde::getData("SELECT * FROM reserveringen WHERE Medespeler3 = '$medespeler2'");
-    $m33 = Tclievelde::getData("SELECT * FROM reserveringen WHERE Medespeler3 = '$medespeler3'");
-    $allreserveringlidnummers = Tclievelde::getData("SELECT Lidnummer FROM reserveringen");
-    if ($medespeler1 !== 0) {
-        $availability = checkPlayerAvailability($lidn1, $lidn2, $lidn3, $lidnummer, $m11, $m12, $m13, $m21, $m22, $m23, $m31, $m32, $m33, $medespeler1, $medespeler2, $medespeler3, $allreserveringlidnummers, null);
-    } else if ($medespeler2 !== 0) {
-        $availability = checkPlayerAvailability($lidn1, $lidn2, $lidn3, $lidnummer, $m11, $m12, $m13, $m21, $m22, $m23, $m31, $m32, $m33, $medespeler1, $medespeler2, $medespeler3, $allreserveringlidnummers, null);
-    } else if ($medespeler3 !== 0) {
-        $availability = checkPlayerAvailability($lidn1, $lidn2, $lidn3, $lidnummer, $m11, $m12, $m13, $m21, $m22, $m23, $m31, $m32, $m33, $medespeler1, $medespeler2, $medespeler3, $allreserveringlidnummers, null);
+
+    if ($medespeler1Reservation) {
+        $errmsg = $medespeler1noId.' heeft al een reservering in het systeem staan.';
     }
-    if (!$availability) {
-        $insert = Tclievelde::insertData("INSERT INTO reserveringen (Lidnummer, Baan, Medespeler1, Medespeler2, Medespeler3, Datum, Tijd) VALUES ('$lidnummer', '$baan', '$medespeler1', '$medespeler2', '$medespeler3', '$datum', '$tijd')");
-        header('location: /reserveren');
+
+    if ($medespeler2Reservation) {
+        $errmsg = $medespeler2noId . ' heeft al een reservering in het systeem staan.';
+    }
+    if ($medespeler3Reservation) {
+        $errmsg = $medespeler3noId . ' heeft al een reservering in het systeem staan.';
+    }
+
+    //Check where participant
+    foreach ($reservations as $reservation) {
+        foreach ($reservation->getRelatedPlayers() as $participant) {
+            if (is_array($participant['reservation_participant'])) {
+                if ($participant['reservation_participant']['ID'] == $medespeler1) {
+                    $errmsg = $medespeler1noId . ' heeft al een reservering in het systeem staan.';
+                } else if ($participant['reservation_participant']['ID'] == $medespeler2) {
+                    $errmsg = $medespeler2noId . ' heeft al een reservering in het systeem staan.';
+                } else if ($participant['reservation_participant']['ID'] == $medespeler3) {
+                    $errmsg = $medespeler3noId . ' heeft al een reservering in het systeem staan.';
+                }
+            }
+        }
+    }
+
+    //Check court date and time
+    foreach ($reservations as $reservation) {
+        if ($reservation->getTimeStart().' '.$reservation->getTimeEnd() == $datum.' '.$tijd[0].' '.$datum.' '.$tijd[1]) {
+            if ('Baan '.$reservation->getCourt() == $baan) {
+                $errmsg = 'Op dit moment is deze baan al in gebruik. Kies een ander tijdstip of een andere baan.';
+            }
+        }
+    }
+
+    //Check shielding
+    foreach ($reservations as $reservation) {
+        if ($datum.' '.$tijd[0] >= $reservation->getTimeStart() && $datum.' '.$tijd[0] <= $reservation->getTimeEnd()) {
+            if ('Baan '.$reservation->getCourt() == $baan) {
+                $errmsg = 'De baan is op dit moment afgeschermd van '.$reservation->getTimeStart().' tot '.$reservation->getTimeEnd().' kies een andere baan of een ander tijdstip.';
+            }
+        }
+    }
+
+    if ($errmsg == '') {
+        $my_post = array(
+            'post_title'    => 'Reservering '.$user['display_name'].' - '.get_field('user_player_number', 'user_'.$user['ID']),
+            'post_type'     => 'reservation',
+            'post_status'   => 'publish',
+            'post_author'   => 1
+        );
+
+        $post_id = wp_insert_post($my_post);
+
+        $baan = explode(' ', $baan);
+
+        $value = array(
+                array(
+                    "reservation_participant" => $medespeler1
+                ),
+            array(
+                "reservation_participant" => $medespeler2
+            ),
+            array(
+                "reservation_participant" => $medespeler3
+            )
+        );
+
+        update_field('reservation_author', $lidnummer, $post_id);
+        update_field('reservation_date_time_start', $datum.' '.$tijd[0], $post_id);
+        update_field('reservation_time_end', $datum.' '.$tijd[1], $post_id);
+        update_field('reservation_court', $baan[1], $post_id);
+        update_field('field_61c18b86ee6fd', $value, $post_id);
+        $succes = 'Uw reservering is succesvol aangemaakt. U en uw medespelers ontvangen een mail met daarin de details.';
     }
 }
 
@@ -92,7 +202,8 @@ require 'page.php';
 <div class="bg-blue">
     <div class="container section">
     <?php
-    if ($user['isAdmin']) {
+    $user_meta = get_userdata($user['ID']);
+    if (in_array('administrator', $user_meta->roles)) {
         ?>
         <h2>
             Admin controls
@@ -125,22 +236,26 @@ require 'page.php';
                 <div class="c-match__newmatch-wrapper">
                     <form method="post" class="c-match__newmatch">
                         <p>
+                            U bent:
+                        </p>
+                        <input name="lidnummer" value="<?php echo $user['display_name'].' - '.get_field('user_player_number', 'user_'.$user['ID']); ?>" readonly />
+                        <p>
                             Zoek naar spelers:
                         </p>
                         <input type="text" id="searchbar" />
                         <div class="c-match__player-selector mt-3">
                             <?php
-                            $spelers = Tclievelde::getData("SELECT * FROM users");
+                            $spelers = Tclievelde::getData("SELECT * FROM wp_users");
                             while ($lid = $spelers->fetch_assoc()) {
-                                ?>
-                                <div class="c-match__single-player <?php if ($lid['gebruikersnaam'] == $user['gebruikersnaam']) {
-                                    echo 'active-player no-deselect';
-                                                                   } ?>">
-                                    <p>
-                                        <?php echo $lid['gebruikersnaam']; ?>
-                                    </p>
-                                </div>
-                                <?php
+                                if ($lid['ID'] !== $user['ID']) {
+                                    ?>
+                                    <div id="<?php echo $lid['ID']; ?>" class="c-match__single-player">
+                                        <p>
+                                            <?php echo get_user_meta($lid['ID'])['first_name'][0].' '.get_user_meta($lid['ID'])['last_name'][0].' - '.get_field('user_player_number', 'user_'.$lid['ID']); ?>
+                                        </p>
+                                    </div>
+                                    <?php
+                                }
                             }
                             ?>
                         </div>
@@ -181,7 +296,7 @@ require 'page.php';
                         <div id="players" class="d-flex flex-wrap c-match__players-select mt-3">
                             <div class="col-20">
                                 <p>
-                                    Geselecteerde spelers:
+                                    Geselecteerde medespelers:
                                 </p>
                                 <div name="spelerswij" id="allspelers" class="d-flex flex-column c-match__allwij">
 
@@ -203,29 +318,47 @@ require 'page.php';
                 </div>
                 <div class="c-match__wrapper mt-5">
                     <?php
-                    while ($reservering = $reserveringen->fetch_assoc()) {
+                    if (!$reservations) {
+                        echo 'Geen reserveringen gevonden';
+                    }
+                    foreach ($reservations as $reservation) {
                         ?>
                         <div class="c-match__single">
                             <p>
-                                <b>Datum en tijd:</b><br> <?php echo $reservering['Datum'].' '.$reservering['Tijd']; ?>
+                                <b>Datum en tijd:</b><br><?php echo $reservation->getTimeStart().' - '.$reservation->getTimeEnd(); ?>
                             </p>
                             <p>
-                                <b>Baan:</b> <?php echo $reservering['Baan']; ?>
+                                <b>Baan:</b> <?php echo $reservation->getCourt(); ?>
                             </p>
                             <div class="d-flex justify-content-between">
                                 <p>
-                                    <?php echo $reservering['Lidnummer']; ?>
+                                    <?php
+                                    $author = $reservation->getAuthor();
+                                    echo $author['user_firstname'].' '.$author['user_lastname'].' - '.get_field('user_player_number', 'user_'.$author['ID']);
+                                    ?>
                                 </p>
                                 <p>
-                                    <?php echo $reservering['Medespeler1']; ?>
+                                    <?php
+                                    if (is_array($reservation->getRelatedPlayers()[0]['reservation_participant'])) {
+                                        echo $reservation->getRelatedPlayers()[0]['reservation_participant']['user_firstname'].' '.$reservation->getRelatedPlayers()[0]['reservation_participant']['user_lastname'].' - '.get_field('user_player_number', 'user_'.$reservation->getRelatedPlayers()[0]['reservation_participant']['ID']);
+                                    }
+                                    ?>
                                 </p>
                             </div>
                             <div class="d-flex justify-content-between">
                                 <p>
-                                    <?php echo $reservering['Medespeler2']; ?>
+                                    <?php
+                                    if (is_array($reservation->getRelatedPlayers()[1]['reservation_participant'])) {
+                                        echo $reservation->getRelatedPlayers()[1]['reservation_participant']['user_firstname'].' '.$reservation->getRelatedPlayers()[1]['reservation_participant']['user_lastname'].' - '.get_field('user_player_number', 'user_'.$reservation->getRelatedPlayers()[1]['reservation_participant']['ID']);
+                                    }
+                                    ?>
                                 </p>
                                 <p>
-                                    <?php echo $reservering['Medespeler3']; ?>
+                                    <?php
+                                    if (is_array($reservation->getRelatedPlayers()[2]['reservation_participant'])) {
+                                        echo $reservation->getRelatedPlayers()[2]['reservation_participant']['user_firstname'].' '.$reservation->getRelatedPlayers()[2]['reservation_participant']['user_lastname'].' - '.get_field('user_player_number', 'user_'.$reservation->getRelatedPlayers()[2]['reservation_participant']['ID']);
+                                    }
+                                    ?>
                                 </p>
                             </div>
                         </div>
@@ -236,7 +369,10 @@ require 'page.php';
                 echo '<p class="c-error__msg">'.$errmsg.'</p>';
             } if ($availability) {
                 echo '<p class="c-error__msg">'.$availability.'</p>';
-            }?>
+            } if ($succes) {
+                echo '<p class="c-succes__msg">'.$succes.'</p>';
+            }
+            ?>
         </div>
     </div>
 </div>

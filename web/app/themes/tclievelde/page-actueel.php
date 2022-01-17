@@ -8,6 +8,7 @@ $query = new WP_Query([
     'posts_per_page' => 2,
     'post_status' => 'publish',
     'paged' => $paged,
+    'post_type' => 'post'
 ]);
 
 $articles = 0;

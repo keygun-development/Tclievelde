@@ -1,5 +1,7 @@
 <?php
 
+namespace functions\core;
+
 trait Proa_Retrievable_Object {
     /**
      * @param  array  $arguments

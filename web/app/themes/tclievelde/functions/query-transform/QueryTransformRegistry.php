@@ -1,5 +1,7 @@
 <?php
 
+use functions\customposts\Proa_Reservation;
+
 require_once __DIR__.'/QueryTransform.php';
 
 class QueryTransformRegistry

@@ -34,7 +34,7 @@ function proa_register_reservation_post_type()
             'exclude_from_search' => true,
             'show_in_nav_menus' => false,
             'hierarchical' => false,
-            'has_archive' => true,
+            'has_archive' => false,
             'menu_position' => 21,
             'menu_icon' => 'dashicons-testimonial',
             'can_export' => true,
@@ -57,6 +57,15 @@ function proa_register_reservation_fields()
         "title" => "Reservering Data",
         "fields" => [
             [
+                "key" => "field_61a9f8bb8jsnb",
+                "label" => "Auteur ID:",
+                "name" => "reservation_author",
+                'type' => 'user',
+                "instructions" => "",
+                "required" => 1,
+                "conditional_logic" => 0,
+            ],
+            [
                 "key" => "field_61a9f8bb8a165",
                 "label" => "Datum en tijd van:",
                 "name" => "reservation_date_time_start",
@@ -72,8 +81,8 @@ function proa_register_reservation_fields()
                 "key" => "field_61a9f8bb78nhs",
                 "label" => "Tijd tot:",
                 "name" => "reservation_time_end",
-                'type' => 'time_picker',
-                'display_format' => 'H:i',
+                'type' => 'date_time_picker',
+                'display_format' => 'd/m/Y H:i',
                 'return_format' => 'Y-m-d H:i',
                 'first_day' => 1,
                 "instructions" => "",
@@ -114,7 +123,7 @@ function proa_register_reservation_fields()
                     [
                         'key' => 'field_61bca85580de3',
                         'label' => 'Medespelers',
-                        'name' => 'reservation-participant',
+                        'name' => 'reservation_participant',
                         'type' => 'user',
                         'instructions' => '',
                         "role" => [
