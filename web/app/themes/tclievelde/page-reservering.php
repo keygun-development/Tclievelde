@@ -1,5 +1,6 @@
 <?php
 
+use functions\customposts\Proa_Reservation;
 use Tclievelde\Tclievelde;
 
 $edit = false;
@@ -7,22 +8,37 @@ $errmsg = '';
 $error = false;
 $availability = '';
 
-$cookieuser = $_COOKIE["user"];
-$user = Tclievelde::getData("SELECT * FROM users WHERE md5(gebruikersnaam)='$cookieuser'");
-$user = $user->fetch_assoc();
+if (isset($_COOKIE['user'])) {
+    $cookieuser = $_COOKIE["user"];
+    $user = Tclievelde::getData("SELECT * FROM wp_users WHERE md5(user_login)='$cookieuser'");
+    $user = $user->fetch_assoc();
+} else {
+    header('location: /inloggen');
+}
 
-$reserveringen = Tclievelde::getData("SELECT * FROM reserveringen");
+$reservations = Proa_Reservation::findBy(
+    [
+        'orderby' => 'date',
+        'post_type' => 'reservation',
+    ],
+    $args['limit'] ?? null
+);
 
 $mijnreservering = null;
 
-while ($reservering = $reserveringen->fetch_assoc()) {
-    if ($reservering['Lidnummer'] == $user['voornaam'].'-'.$user['lidnummer'] || $reservering['Medespeler1'] == $user['voornaam'].'-'.$user['lidnummer'] || $reservering['Medespeler2'] == $user['voornaam'].'-'.$user['lidnummer'] || $reservering['Medespeler3'] == $user['voornaam'].'-'.$user['lidnummer']) {
-        $mijnreservering = $reservering;
+foreach ($reservations as $reservation) {
+    foreach ($reservation->getRelatedPlayers() as $player) {
+        if (is_array($player['reservation_participant'])) {
+            if ($player['reservation_participant']['ID'] == $user['ID']) {
+                $mijnreservering = $reservation;
+            }
+        }
     }
-}
-
-if (!$mijnreservering) {
-    header('location: reserveren');
+    foreach ($reservation->getAuthor() as $auth) {
+        if ($auth == $user['ID']) {
+            $mijnreservering = $reservation;
+        }
+    }
 }
 
 if (isset($_GET['delres'])) {
@@ -32,19 +48,26 @@ if (isset($_GET['delres'])) {
 }
 
 if (isset($_GET['edit'])) {
-    $reservering = $_GET['edit'];
-    $reservering = Tclievelde::getData("SELECT * FROM reserveringen WHERE Id=".$reservering);
-    if ($reservering->num_rows > 0) {
-        $edit = true;
-        $reservering = $reservering->fetch_assoc();
-        $resid = $reservering['Id'];
-        $lidnummer = $reservering['Lidnummer'];
-        $baan = $reservering['Baan'];
-        $speler1 = $reservering['Medespeler1'];
-        $speler2 = $reservering['Medespeler2'];
-        $speler3 = $reservering['Medespeler3'];
-        $datum = $reservering['Datum'];
-        $tijd = $reservering['Tijd'];
+    $id = $_GET['edit'];
+    $reserveringen = Proa_Reservation::findBy(
+        [
+            'post__in' => array($id),
+            'post_type' => 'reservation',
+        ],
+        $args['limit'] ?? null
+    );
+    if ($reserveringen) {
+        foreach ($reserveringen as $reservering) {
+            $edit = true;
+            $resid = $reservering->getID();
+            $lidnummer = $reservering->getAuthor();
+            $baan = $reservering->getCourt();
+            $speler1 = $reservering->getRelatedPlayers()[0];
+            $speler2 = $reservering->getRelatedPlayers()[1];
+            $speler3 = $reservering->getRelatedPlayers()[2];
+            $datum = $reservering->getTimeStart();
+            $tijd = $reservering->getTimeEnd();
+        }
     }
 }
 
@@ -133,24 +156,23 @@ require 'page.php';
                     </p>
                     <input type="text" id="searchbar" />
                     <div class="c-match__player-selector mt-3">
+                        <div id="lidnummer" class="c-match__single-player active-player no-deselect">
+                            <p>
+                                <?php echo $lidnummer['user_firstname'].' '.$lidnummer['user_lastname'].' - '.get_field('user_player_number', 'user_'.$lidnummer['ID']); ?>
+                            </p>
+                        </div>
                         <?php
-                        $spelers = Tclievelde::getData("SELECT * FROM users");
+                        $spelers = Tclievelde::getData("SELECT * FROM wp_users");
                         while ($lid = $spelers->fetch_assoc()) {
-                            ?>
-                            <div id="<?php if ($lid['voornaam'].'-'.$lid['lidnummer'] === $reservering['Lidnummer']) {
-                                echo 'lidnummer';
-                                     } ?>" class="c-match__single-player <?php if ($lid['gebruikersnaam'] == $user['gebruikersnaam']) {
-                                echo 'no-deselect';
-                                     }
-                                     if ($lid['voornaam'].'-'.$lid['lidnummer'] !== $reservering['Lidnummer'] && $lid['gebruikersnaam'] == $user['gebruikersnaam']) {
-                                         echo 'active-player';
-                                     }
-                                        ?>">
-                                <p>
-                                    <?php echo $lid['voornaam'].' - '.$lid['lidnummer']; ?>
-                                </p>
-                            </div>
-                            <?php
+                            if ($lid['ID'] != $lidnummer['ID']) {
+                                ?>
+                                <div id="<?php echo $lid['ID']; ?>" class="c-match__single-player <?php if ($speler1['reservation_participant']['ID'] == $lid['ID']) { echo 'active-player'; } ?>">
+                                    <p>
+                                        <?php echo get_user_meta($lid['ID'])['first_name'][0].' '.get_user_meta($lid['ID'])['last_name'][0].' - '.get_field('user_player_number', 'user_'.$lid['ID']); ?>
+                                    </p>
+                                </div>
+                                <?php
+                            }
                         }
                         ?>
                     </div>
@@ -251,35 +273,50 @@ require 'page.php';
                     Datum en tijd:
                 </b>
                 <br>
-            <?php echo $mijnreservering['Datum'].' '.$mijnreservering['Tijd']; ?>
+            <?php echo $mijnreservering->getTimeStart().' - '.$mijnreservering->getTimeEnd(); ?>
             </p>
             <p>
                 <b>
                     Baan:
                 </b>
-            <?php echo $mijnreservering['Baan']; ?>
+            <?php echo $mijnreservering->getCourt(); ?>
             </p>
             <div class="d-flex justify-content-between">
                 <p>
-                <?php echo $mijnreservering['Lidnummer']; ?>
+                    <?php
+                    $author = $reservation->getAuthor();
+                    echo $author['user_firstname'].' '.$author['user_lastname'].' - '.get_field('user_player_number', 'user_'.$author['ID']);
+                    ?>
                 </p>
                 <p>
-                <?php echo $mijnreservering['Medespeler1']; ?>
+                <?php
+                if (is_array($reservation->getRelatedPlayers()[0]['reservation_participant'])) {
+                    echo $reservation->getRelatedPlayers()[0]['reservation_participant']['user_firstname'].' '.$reservation->getRelatedPlayers()[0]['reservation_participant']['user_lastname'].' - '.get_field('user_player_number', 'user_'.$reservation->getRelatedPlayers()[0]['reservation_participant']['ID']);
+                }
+                ?>
                 </p>
             </div>
             <div class="d-flex justify-content-between">
                 <p>
-                <?php echo $mijnreservering['Medespeler2']; ?>
+                <?php
+                if (is_array($reservation->getRelatedPlayers()[1]['reservation_participant'])) {
+                    echo $reservation->getRelatedPlayers()[1]['reservation_participant']['user_firstname'].' '.$reservation->getRelatedPlayers()[1]['reservation_participant']['user_lastname'].' - '.get_field('user_player_number', 'user_'.$reservation->getRelatedPlayers()[1]['reservation_participant']['ID']);
+                }
+                ?>
                 </p>
                 <p>
-                <?php echo $mijnreservering['Medespeler3']; ?>
+                <?php
+                if (is_array($reservation->getRelatedPlayers()[2]['reservation_participant'])) {
+                    echo $reservation->getRelatedPlayers()[2]['reservation_participant']['user_firstname'].' '.$reservation->getRelatedPlayers()[2]['reservation_participant']['user_lastname'].' - '.get_field('user_player_number', 'user_'.$reservation->getRelatedPlayers()[2]['reservation_participant']['ID']);
+                }
+                ?>
                 </p>
             </div>
             <div class="d-flex justify-content-between">
-                <a href="?edit=<?php echo $mijnreservering['Id'] ?>">
+                <a href="?edit=<?php echo $reservation->getID(); ?>">
                     Bewerken
                 </a>
-                <a href="?delres=<?php echo $mijnreservering['Id'] ?>">
+                <a href="?delres=<?php echo $reservation->getID(); ?>">
                     Verwijderen
                 </a>
             </div>

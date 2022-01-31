@@ -10,6 +10,7 @@ class Proa_Reservation extends Proa_Post_Abstract
     private string $court = '';
     private string $timeStart = '';
     private string $timeEnd = '';
+    private string $id = '';
 
     /** @var Users[]|null */
     private ?array $relatedPlayers = null;
@@ -24,6 +25,11 @@ class Proa_Reservation extends Proa_Post_Abstract
     public function getCourt(): string
     {
         return $this->court;
+    }
+
+    public function getID(): string
+    {
+        return $this->id;
     }
 
     public function getTimeStart(): string
@@ -76,6 +82,13 @@ class Proa_Reservation extends Proa_Post_Abstract
         return $this;
     }
 
+    public function setID($id): Proa_Reservation
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public static function getIdentifier(): string
     {
         return 'reservation';
@@ -99,7 +112,8 @@ class Proa_Reservation extends Proa_Post_Abstract
             ->setCourt(get_field('reservation_court', $post->ID))
             ->setTimeStart(get_field('reservation_date_time_start', $post->ID))
             ->setTimeEnd(get_field('reservation_time_end', $post->ID))
-            ->setRelatedPlayers(get_field('related_player', $post->ID));
+            ->setRelatedPlayers(get_field('related_player', $post->ID))
+            ->setID($post->ID);
 
         return $reservation;
     }
