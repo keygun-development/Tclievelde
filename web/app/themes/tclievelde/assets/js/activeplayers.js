@@ -56,8 +56,8 @@ window.onload = function () {
                     el.name = 'speler'+[i+1]
                     elID.name = 'speler'+[i+1]+'Id'
                 } else {
-                    el.name = 'speler'+[i+2]
-                    elID.name = 'speler'+[i+2]+'Id'
+                    el.name = 'speler'+[i+1]
+                    elID.name = 'speler'+[i+1]+'Id'
                 }
             }
             el.value = allplayers[i].innerText;

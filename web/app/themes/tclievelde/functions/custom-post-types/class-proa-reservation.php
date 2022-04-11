@@ -106,6 +106,7 @@ class Proa_Reservation extends Proa_Post_Abstract
             throw new Exception('Invalid post type given. Expected reservation.');
         }
 
+
         $reservation
             ->setPost($post)
             ->setAuthor(get_field('reservation_author', $post->ID))
@@ -116,5 +117,10 @@ class Proa_Reservation extends Proa_Post_Abstract
             ->setID($post->ID);
 
         return $reservation;
+    }
+
+    public function parseTime(): void
+    {
+        dd($this->timeStart);
     }
 }

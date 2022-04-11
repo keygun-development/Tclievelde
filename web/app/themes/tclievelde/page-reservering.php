@@ -6,7 +6,7 @@ use Tclievelde\Tclievelde;
 $edit = false;
 $errmsg = '';
 $error = false;
-$availability = '';
+$succes = '';
 
 if (isset($_COOKIE['user'])) {
     $cookieuser = $_COOKIE["user"];
@@ -73,69 +73,62 @@ if (isset($_GET['edit'])) {
 
 if (isset($_POST['opslaan'])) {
     $id = $_POST['id'];
-    $lidnummer = $_POST['speler1'];
     $medespeler1 = $_POST['speler2'] ?? 0;
-    if ($medespeler1 !== 0) {
-        $medespelertje1 = Tclievelde::getData("SELECT * FROM users");
-        while ($mede1 = $medespelertje1->fetch_assoc()) {
-            if ($mede1['voornaam'].'-'.$mede1['lidnummer'] === $_POST['speler2']) {
-                $medespeler1 = $_POST['speler2'];
-            }
-        }
-    }
-
-    $medespeler2 = $_POST['speler3']?? 0;
-    if ($medespeler2 !== 0) {
-        $medespelertje2 = Tclievelde::getData("SELECT * FROM users");
-        while ($mede2 = $medespelertje2->fetch_assoc()) {
-            if ($mede2['voornaam'].'-'.$mede2['lidnummer'] === $_POST['speler3']) {
-                $medespeler2 = $_POST['speler3'];
-            }
-        }
-    }
-
-    $medespeler3 = $_POST['speler4']?? 0;
-    if ($medespeler3 !== 0) {
-        $medespelertje3 = Tclievelde::getData("SELECT * FROM users");
-        while ($mede3 = $medespelertje3->fetch_assoc()) {
-            if ($mede3['voornaam'].'-'.$mede3['lidnummer'] === $_POST['speler4']) {
-                $medespeler3 = $_POST['speler4'];
-            }
-        }
-    }
-
-    $baan = $_POST['baan'];
+    $medespeler2 = $_POST['speler3'] ?? 0;
+    $medespeler3 = $_POST['speler4'] ?? 0;
+    $medespeler1id = $_POST['speler2Id'] ?? 0;
+    $medespeler2id = $_POST['speler3Id'] ?? 0;
+    $medespeler3id = $_POST['speler4Id'] ?? 0;
+    $baan = explode(' ', $_POST['baan']);
     $datum = date('d-m-Y', strtotime($_POST['datum']));
     $tijd = $_POST['tijd'];
-    $lidn1 = Tclievelde::getData("SELECT Medespeler1 FROM reserveringen WHERE Medespeler1 = '$lidnummer'");
-    $lidn2 = Tclievelde::getData("SELECT Medespeler2 FROM reserveringen WHERE Medespeler2 = '$lidnummer'");
-    $lidn3 = Tclievelde::getData("SELECT Medespeler3 FROM reserveringen WHERE Medespeler3 = '$lidnummer'");
-    $m11 = Tclievelde::getData("SELECT * FROM reserveringen WHERE Medespeler1 = '$medespeler1'");
-    $m12 = Tclievelde::getData("SELECT * FROM reserveringen WHERE Medespeler1 = '$medespeler2'");
-    $m13 = Tclievelde::getData("SELECT * FROM reserveringen WHERE Medespeler1 = '$medespeler3'");
-    $m21 = Tclievelde::getData("SELECT * FROM reserveringen WHERE Medespeler2 = '$medespeler1'");
-    $m22 = Tclievelde::getData("SELECT * FROM reserveringen WHERE Medespeler2 = '$medespeler2'");
-    $m23 = Tclievelde::getData("SELECT * FROM reserveringen WHERE Medespeler2 = '$medespeler3'");
-    $m31 = Tclievelde::getData("SELECT * FROM reserveringen WHERE Medespeler3 = '$medespeler1'");
-    $m32 = Tclievelde::getData("SELECT * FROM reserveringen WHERE Medespeler3 = '$medespeler2'");
-    $m33 = Tclievelde::getData("SELECT * FROM reserveringen WHERE Medespeler3 = '$medespeler3'");
-    $allreserveringlidnummers = Tclievelde::getData("SELECT Lidnummer FROM reserveringen");
-    $thisreservation = Tclievelde::getData("SELECT * FROM reserveringen WHERE ID=$id");
-    $dtb = Tclievelde::getData("SELECT Datum, Tijd FROM reserveringen WHERE Datum = '$datum' AND Tijd = '$tijd' AND Baan ='$baan'");
-    $thisreservation = $thisreservation->fetch_assoc();
-    if ($medespeler1 !== 0) {
-        $availability = checkPlayerAvailability($lidn1, $lidn2, $lidn3, $lidnummer, $m11, $m12, $m13, $m21, $m22, $m23, $m31, $m32, $m33, $medespeler1, $medespeler2, $medespeler3, $allreserveringlidnummers, $thisreservation);
-    } else if ($medespeler2 !== 0) {
-        $availability = checkPlayerAvailability($lidn1, $lidn2, $lidn3, $lidnummer, $m11, $m12, $m13, $m21, $m22, $m23, $m31, $m32, $m33, $medespeler1, $medespeler2, $medespeler3, $allreserveringlidnummers, $thisreservation);
-    } else if ($medespeler3 !== 0) {
-        $availability = checkPlayerAvailability($lidn1, $lidn2, $lidn3, $lidnummer, $m11, $m12, $m13, $m21, $m22, $m23, $m31, $m32, $m33, $medespeler1, $medespeler2, $medespeler3, $allreserveringlidnummers, $thisreservation);
+
+    $tijdStart = $datum.' '.explode('-', $tijd)[0];
+    $tijdEnd = $datum.' '.explode('-', $tijd)[1];
+    foreach ($reservations as $reservation) {
+        foreach ($reservation->getRelatedPlayers() as $player) {
+            if (is_array($player['reservation_participant'])) {
+                if ($player['reservation_participant']['user_firstname'].' '.$player['reservation_participant']['user_lastname'].' - '.get_field('user_player_number', 'user_'.$player['reservation_participant']['ID']) === $medespeler1
+                    || $player['reservation_participant']['user_firstname'].' '.$player['reservation_participant']['user_lastname'].' - '.get_field('user_player_number', 'user_'.$player['reservation_participant']['ID']) === $medespeler2
+                    || $player['reservation_participant']['user_firstname'].' '.$player['reservation_participant']['user_lastname'].' - '.get_field('user_player_number', 'user_'.$player['reservation_participant']['ID']) === $medespeler3
+                ) {
+                    if ($reservation->getID() !== $id) {
+                        $errmsg = $player['reservation_participant']['user_firstname']." heeft al een reservering in het systeem staan.";
+                    }
+                }
+            }
+        }
+        if ($reservation->getCourt() == $baan[1] && $reservation->getTimeStart() == $tijdStart && $reservation->getID() !== $id) {
+            $errmsg = "Op dat moment wordt er al op de baan gespeeld";
+        }
     }
-    if ($dtb->num_rows > 1) {
-        $errmsg = 'Helaas wordt er al gespeeld op dit tijdstip op deze baan. Probeer een ander tijdstip of baan';
-        $error = true;
-    }
-    if (!$availability) {
-        $update = Tclievelde::insertData("UPDATE reserveringen SET Lidnummer='$lidnummer', Baan='$baan', Medespeler1='$medespeler1', Medespeler2='$medespeler2', Medespeler3='$medespeler3', Datum='$datum', Tijd='$tijd' WHERE Id = '$id'");
+    if (!$errmsg) {
+        $myreservation = Proa_Reservation::findBy(
+            [
+                'orderby' => 'date',
+                'post_type' => 'reservation',
+                'post_id' => $id,
+            ],
+            $args['limit'] ?? null
+        );
+        $value = array(
+            array(
+                "reservation_participant" => $medespeler1id
+            ),
+            array(
+                "reservation_participant" => $medespeler2id
+            ),
+            array(
+                "reservation_participant" => $medespeler3id
+            )
+        );
+
+        $id = intval($id);
+
+        update_field('reservation_date_time_start', $tijdStart, $id);
+        update_field('reservation_time_end', $tijdEnd, $id);
+        update_field('reservation_court', $baan[1], $id);
+        update_field('related_player', $value, $id);
         header('location: /reservering');
     }
 }
@@ -166,7 +159,24 @@ require 'page.php';
                         while ($lid = $spelers->fetch_assoc()) {
                             if ($lid['ID'] != $lidnummer['ID']) {
                                 ?>
-                                <div id="<?php echo $lid['ID']; ?>" class="c-match__single-player <?php if ($speler1['reservation_participant']['ID'] == $lid['ID']) { echo 'active-player'; } ?>">
+                                <div id="<?php echo $lid['ID']; ?>" class="c-match__single-player
+                                <?php
+                                if (is_array($speler1['reservation_participant'])) {
+                                    if ($speler1['reservation_participant']['ID'] == $lid['ID']) {
+                                        echo 'active-player';
+                                    }
+                                }
+                                if (is_array($speler2['reservation_participant'])) {
+                                    if ($speler2['reservation_participant']['ID'] == $lid['ID']) {
+                                        echo 'active-player';
+                                    }
+                                }
+                                if (is_array($speler3['reservation_participant'])) {
+                                    if ($speler3['reservation_participant']['ID'] == $lid['ID']) {
+                                        echo 'active-player';
+                                    }
+                                }
+                                ?>">
                                     <p>
                                         <?php echo get_user_meta($lid['ID'])['first_name'][0].' '.get_user_meta($lid['ID'])['last_name'][0].' - '.get_field('user_player_number', 'user_'.$lid['ID']); ?>
                                     </p>
@@ -178,13 +188,14 @@ require 'page.php';
                     </div>
                     <div class="col-10">
                         <p>
-                            Spelers:
+                            Medespelers:
                         </p>
                         <div id="allspelers" class="d-flex flex-column c-match__allwij">
                             <?php
-                            for ($i=1; $i<4; $i++) {
-                                if ($mijnreservering['Medespeler'.$i]) {
-                                    echo '<input class="active-players" name="speler'.$i.'"value="'.$mijnreservering['Medespeler'.$i].'" readonly />';
+                            foreach ($mijnreservering->getRelatedPlayers() as $medespeler) {
+                                if ($medespeler['reservation_participant']) {
+                                    echo 'test';
+                                    echo '<input class="active-players" value="'.$medespeler['reservation_participant']['user_firstname']." ".$medespeler['reservation_participant']['user_lastname'].' - '.get_field('user_player_number', 'user_'.$medespeler['reservation_participant']['ID']).'" readonly />';
                                 }
                             } ?>
                         </div>
@@ -193,10 +204,10 @@ require 'page.php';
                         Baan:
                     </p>
                     <select name="baan">
-                        <option <?php if ($mijnreservering['Baan'] == 'Baan 1') {
+                        <option <?php if ($mijnreservering->getCourt() == '1') {
                             echo 'selected';
                                 } ?>>Baan 1</option>
-                        <option <?php if ($mijnreservering['Baan'] == 'Baan 2') {
+                        <option <?php if ($mijnreservering->getCourt() == '2') {
                             echo 'selected';
                                 } ?>>Baan 2</option>
                     </select>
@@ -204,51 +215,53 @@ require 'page.php';
                         Datum en tijd:
                     </p>
                     <div class="d-flex">
-                        <input type="date" name="datum" value="<?php echo date('Y-m-d', strtotime($mijnreservering['Datum'])); ?>" />
+                        <?php $time = explode(' ', $mijnreservering->getTimeStart().' '.$mijnreservering->getTimeEnd());
+                        ?>
+                        <input type="date" name="datum" value="<?php echo $time[0]; ?>" />
                         <select class="ml-3" name="tijd">
-                            <option <?php if ($mijnreservering['Tijd'] == '09:00-10:00') {
+                            <option <?php if ($time[1].'-'.$time[3] == '09:00-10:00') {
                                 echo 'selected';
                                     } ?>>09:00-10:00</option>
-                            <option <?php if ($mijnreservering['Tijd'] == '10:00-11:00') {
+                            <option <?php if ($time[1].'-'.$time[3] == '10:00-11:00') {
                                 echo 'selected';
                                     } ?>>10:00-11:00</option>
-                            <option <?php if ($mijnreservering['Tijd'] == '11:00-12:00') {
+                            <option <?php if ($time[1].'-'.$time[3] == '11:00-12:00') {
                                 echo 'selected';
                                     } ?>>11:00-12:00</option>
-                            <option <?php if ($mijnreservering['Tijd'] == '12:00-13:00') {
+                            <option <?php if ($time[1].'-'.$time[3] == '12:00-13:00') {
                                 echo 'selected';
                                     } ?>>12:00-13:00</option>
-                            <option <?php if ($mijnreservering['Tijd'] == '13:00-14:00') {
+                            <option <?php if ($time[1].'-'.$time[3] == '13:00-14:00') {
                                 echo 'selected';
                                     } ?>>13:00-14:00</option>
-                            <option <?php if ($mijnreservering['Tijd'] == '14:00-15:00') {
+                            <option <?php if ($time[1].'-'.$time[3] == '14:00-15:00') {
                                 echo 'selected';
                                     } ?>>14:00-15:00</option>
-                            <option <?php if ($mijnreservering['Tijd'] == '15:00-16:00') {
+                            <option <?php if ($time[1].'-'.$time[3] == '15:00-16:00') {
                                 echo 'selected';
                                     } ?>>15:00-16:00</option>
-                            <option <?php if ($mijnreservering['Tijd'] == '16:00-17:00') {
+                            <option <?php if ($time[1].'-'.$time[3] == '16:00-17:00') {
                                 echo 'selected';
                                     } ?>>16:00-17:00</option>
-                            <option <?php if ($mijnreservering['Tijd'] == '17:00-18:00') {
+                            <option <?php if ($time[1].'-'.$time[3] == '17:00-18:00') {
                                 echo 'selected';
                                     } ?>>17:00-18:00</option>
-                            <option <?php if ($mijnreservering['Tijd'] == '18:00-19:00') {
+                            <option <?php if ($time[1].'-'.$time[3] == '18:00-19:00') {
                                 echo 'selected';
                                     } ?>>18:00-19:00</option>
-                            <option <?php if ($mijnreservering['Tijd'] == '19:00-20:00') {
+                            <option <?php if ($time[1].'-'.$time[3] == '19:00-20:00') {
                                 echo 'selected';
                                     } ?>>19:00-20:00</option>
-                            <option <?php if ($mijnreservering['Tijd'] == '20:00-21:00') {
+                            <option <?php if ($time[1].'-'.$time[3] == '20:00-21:00') {
                                 echo 'selected';
                                     } ?>>20:00-21:00</option>
-                            <option <?php if ($mijnreservering['Tijd'] == '21:00-22:00') {
+                            <option <?php if ($time[1].'-'.$time[3] == '21:00-22:00') {
                                 echo 'selected';
                                     } ?>>21:00-22:00</option>
-                            <option <?php if ($mijnreservering['Tijd'] == '22:00-23:00') {
+                            <option <?php if ($time[1].'-'.$time[3] == '22:00-23:00') {
                                 echo 'selected';
                                     } ?>>22:00-23:00</option>
-                            <option <?php if ($mijnreservering['Tijd'] == '23:00-24:00') {
+                            <option <?php if ($time[1].'-'.$time[3] == '23:00-24:00') {
                                 echo 'selected';
                                     } ?>>23:00-00:00</option>
                         </select>
@@ -259,8 +272,8 @@ require 'page.php';
                 if ($errmsg) {
                     echo $errmsg;
                 }
-                if ($availability !== false) {
-                    echo $availability;
+                if ($succes) {
+                    echo $succes;
                 }
                 ?>
             </div>

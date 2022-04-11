@@ -96,25 +96,31 @@ if (isset($_POST['aanmaken'])) {
 
     //Check where author
     if ($medespeler1 !== 0) {
-        foreach ($reservation->getAuthor() as $auth) {
-            if ($auth == $medespeler1) {
-                $medespeler1Reservation = true;
+        foreach ($reservations as $reservation) {
+            foreach ($reservation->getAuthor() as $auth) {
+                if ($auth == $medespeler1) {
+                    $medespeler1Reservation = true;
+                }
             }
         }
     }
 
     if ($medespeler2 !== 0) {
-        foreach ($reservation->getAuthor() as $auth) {
-            if ($auth == $medespeler2) {
-                $medespeler2Reservation = true;
+        foreach ($reservations as $reservation) {
+            foreach ($reservation->getAuthor() as $auth) {
+                if ($auth == $medespeler2) {
+                    $medespeler2Reservation = true;
+                }
             }
         }
     }
 
     if ($medespeler3 !== 0) {
-        foreach ($reservation->getAuthor() as $auth) {
-            if ($auth == $medespeler3) {
-                $medespeler3Reservation = true;
+        foreach ($reservations as $reservation) {
+            foreach ($reservation->getAuthor() as $auth) {
+                if ($auth == $medespeler3) {
+                    $medespeler3Reservation = true;
+                }
             }
         }
     }
@@ -192,7 +198,7 @@ if (isset($_POST['aanmaken'])) {
         update_field('reservation_time_end', $datum.' '.$tijd[1], $post_id);
         update_field('reservation_court', $baan[1], $post_id);
         update_field('field_61c18b86ee6fd', $value, $post_id);
-        $succes = 'Uw reservering is succesvol aangemaakt. U en uw medespelers ontvangen een mail met daarin de details.';
+        $succes = 'Uw reservering is succesvol aangemaakt.';
     }
 }
 
@@ -212,7 +218,7 @@ require 'page.php';
             <a href="/wp/wp-admin" class="c-button__primary">
                 Adminpaneel
             </a>
-            <a href="?afschermen" class="c-button__primary ml-4">
+            <a href="/wp/wp-admin/post-new.php?post_type=reservation" target="_blank" class="c-button__primary ml-4">
                 Baan afschermen
             </a>
         </div>
@@ -348,15 +354,19 @@ require 'page.php';
                             <div class="d-flex justify-content-between">
                                 <p>
                                     <?php
-                                    if (is_array($reservation->getRelatedPlayers()[1]['reservation_participant'])) {
-                                        echo $reservation->getRelatedPlayers()[1]['reservation_participant']['user_firstname'].' '.$reservation->getRelatedPlayers()[1]['reservation_participant']['user_lastname'].' - '.get_field('user_player_number', 'user_'.$reservation->getRelatedPlayers()[1]['reservation_participant']['ID']);
+                                    if (count($reservation->getRelatedPlayers()) > 1) {
+                                        if (is_array($reservation->getRelatedPlayers()[1]['reservation_participant'])) {
+                                            echo $reservation->getRelatedPlayers()[1]['reservation_participant']['user_firstname'] . ' ' . $reservation->getRelatedPlayers()[1]['reservation_participant']['user_lastname'] . ' - ' . get_field('user_player_number', 'user_' . $reservation->getRelatedPlayers()[1]['reservation_participant']['ID']);
+                                        }
                                     }
                                     ?>
                                 </p>
                                 <p>
                                     <?php
-                                    if (is_array($reservation->getRelatedPlayers()[2]['reservation_participant'])) {
-                                        echo $reservation->getRelatedPlayers()[2]['reservation_participant']['user_firstname'].' '.$reservation->getRelatedPlayers()[2]['reservation_participant']['user_lastname'].' - '.get_field('user_player_number', 'user_'.$reservation->getRelatedPlayers()[2]['reservation_participant']['ID']);
+                                    if (count($reservation->getRelatedPlayers()) > 1) {
+                                        if (is_array($reservation->getRelatedPlayers()[2]['reservation_participant'])) {
+                                            echo $reservation->getRelatedPlayers()[2]['reservation_participant']['user_firstname'] . ' ' . $reservation->getRelatedPlayers()[2]['reservation_participant']['user_lastname'] . ' - ' . get_field('user_player_number', 'user_' . $reservation->getRelatedPlayers()[2]['reservation_participant']['ID']);
+                                        }
                                     }
                                     ?>
                                 </p>
