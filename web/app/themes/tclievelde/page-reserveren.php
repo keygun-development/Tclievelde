@@ -64,7 +64,7 @@ if (isset($_GET['newreservation'])) {
 
 if (isset($_POST['aanmaken'])) {
     $baan = $_POST['baan'];
-    $datum = date('d-m-Y', strtotime($_POST['date']));
+    $datum = date('Y-m-d', strtotime($_POST['date']));
     $tijd = $_POST['time'];
     $lidnummer = $user['ID'];
     $medespeler1 = $_POST['speler1Id'] ?? 0;

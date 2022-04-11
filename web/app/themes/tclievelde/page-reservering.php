@@ -101,6 +101,9 @@ if (isset($_POST['opslaan'])) {
         if ($reservation->getCourt() == $baan[1] && $reservation->getTimeStart() == $tijdStart && $reservation->getID() !== $id) {
             $errmsg = "Op dat moment wordt er al op de baan gespeeld";
         }
+        if ($reservation->getCourt() == $baan[1] && $reservation->getTimeStart() > $tijdStart && $reservation->getTimeEnd() <= $tijdStart && $reservation->getID() !== $id) {
+            $errmsg = "Op dat moment wordt er al op de baan gespeeld";
+        }
     }
     if (!$errmsg) {
         $myreservation = Proa_Reservation::findBy(
@@ -307,8 +310,10 @@ require 'page.php';
                 </p>
                 <p>
                 <?php
-                if (is_array($reservation->getRelatedPlayers()[0]['reservation_participant'])) {
-                    echo $reservation->getRelatedPlayers()[0]['reservation_participant']['user_firstname'].' '.$reservation->getRelatedPlayers()[0]['reservation_participant']['user_lastname'].' - '.get_field('user_player_number', 'user_'.$reservation->getRelatedPlayers()[0]['reservation_participant']['ID']);
+                if (count($reservation->getRelatedPlayers()) > 1) {
+                    if (is_array($reservation->getRelatedPlayers()[0]['reservation_participant'])) {
+                        echo $reservation->getRelatedPlayers()[0]['reservation_participant']['user_firstname'] . ' ' . $reservation->getRelatedPlayers()[0]['reservation_participant']['user_lastname'] . ' - ' . get_field('user_player_number', 'user_' . $reservation->getRelatedPlayers()[0]['reservation_participant']['ID']);
+                    }
                 }
                 ?>
                 </p>
@@ -316,15 +321,19 @@ require 'page.php';
             <div class="d-flex justify-content-between">
                 <p>
                 <?php
-                if (is_array($reservation->getRelatedPlayers()[1]['reservation_participant'])) {
-                    echo $reservation->getRelatedPlayers()[1]['reservation_participant']['user_firstname'].' '.$reservation->getRelatedPlayers()[1]['reservation_participant']['user_lastname'].' - '.get_field('user_player_number', 'user_'.$reservation->getRelatedPlayers()[1]['reservation_participant']['ID']);
+                if (count($reservation->getRelatedPlayers()) > 1) {
+                    if (is_array($reservation->getRelatedPlayers()[1]['reservation_participant'])) {
+                        echo $reservation->getRelatedPlayers()[1]['reservation_participant']['user_firstname'] . ' ' . $reservation->getRelatedPlayers()[1]['reservation_participant']['user_lastname'] . ' - ' . get_field('user_player_number', 'user_' . $reservation->getRelatedPlayers()[1]['reservation_participant']['ID']);
+                    }
                 }
                 ?>
                 </p>
                 <p>
                 <?php
-                if (is_array($reservation->getRelatedPlayers()[2]['reservation_participant'])) {
-                    echo $reservation->getRelatedPlayers()[2]['reservation_participant']['user_firstname'].' '.$reservation->getRelatedPlayers()[2]['reservation_participant']['user_lastname'].' - '.get_field('user_player_number', 'user_'.$reservation->getRelatedPlayers()[2]['reservation_participant']['ID']);
+                if (count($reservation->getRelatedPlayers()) > 1) {
+                    if (is_array($reservation->getRelatedPlayers()[2]['reservation_participant'])) {
+                        echo $reservation->getRelatedPlayers()[2]['reservation_participant']['user_firstname'] . ' ' . $reservation->getRelatedPlayers()[2]['reservation_participant']['user_lastname'] . ' - ' . get_field('user_player_number', 'user_' . $reservation->getRelatedPlayers()[2]['reservation_participant']['ID']);
+                    }
                 }
                 ?>
                 </p>
