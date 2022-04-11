@@ -133,6 +133,10 @@ if (isset($_POST['opslaan'])) {
     }
 }
 
+if (!$mijnreservering) {
+    header('location: /reserveren');
+}
+
 get_header();
 require 'page.php';
 ?>
