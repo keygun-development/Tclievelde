@@ -43,7 +43,7 @@ foreach ($reservations as $reservation) {
 
 if (isset($_GET['delres'])) {
     $id = $_GET['delres'];
-    Tclievelde::insertData("DELETE FROM reserveringen WHERE Id=".$id);
+    wp_delete_post($id);
     header('location: reserveren');
 }
 
