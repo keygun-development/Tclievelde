@@ -24,6 +24,13 @@ if (isset($_COOKIE['user'])) {
     header('location: /inloggen');
 }
 
+foreach ($reservations as $reservation) {
+    if (explode(' ', $reservation->getTimeStart())[0] <= date('Y-m-d')) {
+        wp_delete_post($reservation->getId());
+        header('location: reserveren');
+    }
+}
+
 if (isset($_GET['newreservation'])) {
     $participantReservation = false;
 
