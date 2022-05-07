@@ -23,6 +23,7 @@ if (isset($_COOKIE['user'])) {
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://kit.fontawesome.com/819c0dbdc7.js" crossorigin="anonymous"></script>
 
     <?php
     do_action('mst_above_wp_head');

@@ -21,7 +21,7 @@ if (isset($_COOKIE['user'])) {
                 </h1>
                 <?php
                 if (get_page_uri() == 'reserveren') {
-                    echo '<p>Welkom ' . $user['user_login'] . ', reserveren kan hieronder.</p>';
+                    echo '<p class="col-10">Welkom in het reserveringsportaal ' . $user['user_login'] .', kies hieronder uit een aantal opties om een nieuwe reservering aan te maken of alle reserveringen in te zien.</p>';
                 }
                 ?>
                 <p>

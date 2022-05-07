@@ -98,6 +98,13 @@ if (isset($_POST['opslaan'])) {
                 }
             }
         }
+        if ($datum < date('d-m-Y')) {
+            $errmsg = 'U kunt niet in het verleden reserveren.';
+        }
+
+        if ($datum == date('d-m-Y') && explode('-', $tijd)[0] <= date('H')) {
+            $errmsg = 'U kunt niet in het verleden reserveren.';
+        }
         if ($reservation->getCourt() == $baan[1] && $reservation->getTimeStart() == $tijdStart && $reservation->getID() !== $id) {
             $errmsg = "Op dat moment wordt er al op de baan gespeeld";
         }
@@ -145,6 +152,11 @@ require 'page.php';
 ?>
 <div class="bg-blue">
     <div class="container section">
+        <div>
+            <a href="/reserveren">
+                <i class="fa-solid fa-arrow-left"></i> Terug naar reserveringen
+            </a>
+        </div>
         <?php
         if ($edit) {
             ?>

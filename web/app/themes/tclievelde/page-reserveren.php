@@ -86,11 +86,7 @@ if (isset($_POST['aanmaken'])) {
         $errmsg = 'U kunt niet in het verleden reserveren.';
     }
 
-    if ($datum == date('d-m-Y') && $tijd[0] <= date('H:i')) {
-        $errmsg = 'U kunt niet in het verleden reserveren.';
-    }
-
-    if ($datum.' '.$tijd[0] <= date('d-m-Y H:i')) {
+    if ($datum == date('d-m-Y') && explode('-', $tijd)[0] <= date('H')) {
         $errmsg = 'U kunt niet in het verleden reserveren.';
     }
 
