@@ -1,9 +1,9 @@
 function toggleHamburger() {
     var x = document.getElementById("mobile-nav");
-    if (x.style.height === "265px") {
+    if (x.style.height === "308px") {
         x.style.height = "0";
     } else {
-        x.style.height = "265px";
+        x.style.height = "308px";
     }
 }
 

@@ -30,7 +30,8 @@ class NavigationMobile extends Navigation
      */
     public function getEndView(): string
     {
-        return '<a id="bars" class="header__hamburger" onclick="toggleHamburger()">
+        return '<div class="hamburger__header"><a href="/uitloggen"><div>Uitloggen</div></a></div>
+<a id="bars" class="header__hamburger" onclick="toggleHamburger()">
                     <div class="one"></div>
                     <div class="two"></div>
                     <div class="three"></div>
