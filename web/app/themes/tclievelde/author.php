@@ -31,7 +31,7 @@ $args = array(
                 foreach (get_posts($args) as $post) {
                     ?>
                     <div class="mt-5">
-                        <a href="<?php echo $post->guid; ?>">
+                        <a href="<?php echo get_permalink($post); ?>">
                             <div class="d-flex flex-md-row flex-column">
                                 <div class="col-md-5">
                                     <?php if (get_the_post_thumbnail_url($post)) { ?>

@@ -44,7 +44,7 @@ get_header();
             <div class="col-20">
                 <?php foreach ($recent_articles as $article) { ?>
                     <div class="c-article__related mb-4">
-                        <a href="<?php echo $article->guid; ?>">
+                        <a href="<?php echo get_permalink($article); ?>">
                             <div class="d-md-flex col-20">
                                 <div class="col-md-6">
                                     <?php if (get_the_post_thumbnail_url($article)) { ?>
