@@ -1,11 +1,9 @@
 function toggleHamburger() {
     var x = document.getElementById("mobile-nav");
-    if (x.style.maxHeight === "300px") {
-        x.style.maxHeight = "0";
-        x.style.display = "none";
+    if (x.style.height === "265px") {
+        x.style.height = "0";
     } else {
-        x.style.display = "block";
-        x.style.maxHeight = "300px";
+        x.style.height = "265px";
     }
 }
 

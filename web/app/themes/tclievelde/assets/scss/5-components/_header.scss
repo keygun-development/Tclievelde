@@ -68,16 +68,15 @@ html {
 }
 
 .header__hamburger {
-  display: block;
   position: absolute;
-  top: 20px;
+  top: 50px;
   right: 40px;
 
   .one, .two, .three {
     width: 20px;
     border-radius: 1px;
     height: 2px;
-    background-color: #fff;
+    background-color: #000;
     position: absolute;
     transition: .3s;
   }
@@ -149,4 +148,35 @@ html {
 .c-header__hero-img {
   height: 100px;
   width: auto;
+}
+
+.c-header__menu {
+  .menu {
+    margin: 0;
+  }
+
+  .menu-header-menu-container {
+    .menu-item {
+      list-style-type: none;
+      padding: 34px 15px;
+      margin: 0;
+    }
+    ul {
+      display: flex;
+
+      a {
+        color: $gray !important;
+        font-size: 1.25rem;
+      }
+
+      .active {
+        border-bottom: 3px solid $tao-baby-blue;
+
+        a {
+          color: $black !important;
+          font-weight: bold !important;
+        }
+      }
+    }
+  }
 }

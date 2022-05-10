@@ -13,12 +13,12 @@
         <h2>
             Recente artikelen
         </h2>
-        <div class="mt-5 d-flex">
+        <div class="mt-5 d-lg-flex d-block">
             <?php
             foreach ($recent_articles as $article) {
                 ?>
-                <a href="<?php echo get_permalink($article); ?>">
-                    <div class="c-article__img" style="background-image: url('<?php echo get_the_post_thumbnail_url($article, 'original'); ?>');">
+                <a class="col-10" href="<?php echo get_permalink($article); ?>">
+                    <div class="c-article__img mt-5 mt-lg-0" style="background-image: url('<?php echo get_the_post_thumbnail_url($article, 'original'); ?>');">
                         <div class="c-article__overlay"></div>
                         <div class="c-article__content">
                             <h2>

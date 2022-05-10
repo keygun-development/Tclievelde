@@ -30,7 +30,7 @@ class NavigationDesktop extends Navigation
     {
         return '
         <a href="javascript:void(0);" class="header__hamburger"
-           onclick="Tclievelde.toggleHamburger()">
+           onclick="toggleHamburger()">
             <i class="fa fa-bars"></i>
         </a></nav>';
     }

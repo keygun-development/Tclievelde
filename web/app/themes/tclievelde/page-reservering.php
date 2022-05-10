@@ -233,11 +233,11 @@ require 'page.php';
                     <p>
                         Datum en tijd:
                     </p>
-                    <div class="d-flex">
+                    <div class="d-md-flex">
                         <?php $time = explode(' ', $mijnreservering->getTimeStart().' '.$mijnreservering->getTimeEnd());
                         ?>
                         <input type="date" name="datum" value="<?php echo $time[0]; ?>" />
-                        <select class="ml-3" name="tijd">
+                        <select class="ml-md-3 mt-3 mt-md-0" name="tijd">
                             <option <?php if ($time[1].'-'.$time[3] == '09:00-10:00') {
                                 echo 'selected';
                                     } ?>>09:00-10:00</option>

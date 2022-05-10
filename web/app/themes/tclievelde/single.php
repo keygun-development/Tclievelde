@@ -45,15 +45,15 @@ get_header();
                 <?php foreach ($recent_articles as $article) { ?>
                     <div class="c-article__related mb-4">
                         <a href="<?php echo $article->guid; ?>">
-                            <div class="d-flex col-20">
-                                <div class="col-6">
+                            <div class="d-md-flex col-20">
+                                <div class="col-md-6">
                                     <?php if (get_the_post_thumbnail_url($article)) { ?>
                                         <img class="c-news__image" src="<?php echo get_the_post_thumbnail_url($article, 'original'); ?>" />
                                     <?php } else { ?>
                                         <img class="c-news__image" src="/app/themes/tclievelde/assets/images/300x200.jpg" />
                                     <?php } ?>
                                 </div>
-                                <div class="ml-5 col-14">
+                                <div class="col-md-14">
                                     <h2 class="c-news__heading">
                                         <?php echo $article->post_title; ?>
                                     </h2>

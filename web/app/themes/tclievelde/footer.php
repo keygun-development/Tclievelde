@@ -5,21 +5,23 @@
                         <h3 class="title--footer">
                             Handige links
                         </h3>
-                        <?php
-                            wp_nav_menu([
-                                    'menu_id' => 'footer-nav-1'
-                            ]);
+                        <div class="c-footer__menu">
+                            <?php
+                                wp_nav_menu([
+                                        'menu_id' => 'footer-nav-1'
+                                ]);
                             ?>
+                        </div>
                     </div>
                     <div class="col-lg-13 col-20">
                         <h3 class="title--footer">
                             Adressen
                         </h3>
-                        <div class="col-20 d-flex justify-content-between">
+                        <div class="col-20 d-md-flex d-block justify-content-between">
                             <p>
                                 Adres tennispark: Tennispark De Bonkelaer Lievelderweg 120 A 7137NB Lievelde
                             </p>
-                            <p class="mx-4">
+                            <p class="mx-md-4">
                                 Secretariaat eigenaar tennispark: Stichting De Bonkelaer P/a De Wijn 6 7137MG Lievelde
                             </p>
                             <p>

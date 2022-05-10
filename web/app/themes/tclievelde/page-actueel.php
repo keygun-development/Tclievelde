@@ -26,15 +26,15 @@ while ($query->have_posts()) :
                     } ?>">
             <div class="container section">
                 <a href="<?php echo the_permalink(); ?>">
-                    <div class="row">
-                        <div class="col-5">
+                    <div class="d-md-flex flex-md-row flex-column">
+                        <div class="col-md-5 col-20">
                             <?php if (has_post_thumbnail()) { ?>
                                 <img class="c-news__image" src="<?php echo the_post_thumbnail_url('full') ?>" />
                             <?php } else { ?>
                                 <img class="c-news__image" src="/app/themes/tclievelde/assets/images/300x200.jpg" />
                             <?php } ?>
                         </div>
-                        <div class="col-14 ml-4 news__content">
+                        <div class="col-md-14 col-20 news__content">
                             <h2 class="c-news__heading">
                                 <?php echo the_title(); ?>
                             </h2>

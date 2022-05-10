@@ -18,7 +18,7 @@ require 'page.php';
 ?>
 <div class="bg-blue">
     <div class="container section">
-        <form method="post" class="col-6">
+        <form method="post" class="col-md-6">
             <p>
                 Gebruikersnaam:
             </p>
@@ -27,7 +27,7 @@ require 'page.php';
                 Wachtwoord:
             </p>
             <input name="wachtwoord" type="password" />
-            <input type="submit" class="wp-block-button__link has-background mt-5" name="inloggen" value="Verzenden" style="background-color:#46c5f1" />
+            <input type="submit" class="c-button__primary mt-5" name="inloggen" value="Verzenden" />
         </form>
         <?php if ($error) {
             echo '<p class="c-error__msg">'.$error.'</p>';

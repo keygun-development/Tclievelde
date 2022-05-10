@@ -32,15 +32,15 @@ $args = array(
                     ?>
                     <div class="mt-5">
                         <a href="<?php echo $post->guid; ?>">
-                            <div class="row">
-                                <div class="col-5">
+                            <div class="d-flex flex-md-row flex-column">
+                                <div class="col-md-5">
                                     <?php if (get_the_post_thumbnail_url($post)) { ?>
                                         <img class="c-news__image" src="<?php echo get_the_post_thumbnail_url($post, 'original'); ?>" />
                                     <?php } else { ?>
                                         <img class="c-news__image" src="/app/themes/tclievelde/assets/images/300x200.jpg" />
                                     <?php } ?>
                                 </div>
-                                <div class="col-14 ml-4 news__content">
+                                <div class="col-md-14 ml-md-4 news__content">
                                     <h2 class="c-news__heading">
                                         <?php echo $post->post_title; ?>
                                     </h2>

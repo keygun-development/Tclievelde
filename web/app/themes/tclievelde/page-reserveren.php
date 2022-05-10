@@ -217,11 +217,11 @@ require 'page.php';
         <h2>
             Admin controls
         </h2>
-        <div class="d-flex">
+        <div class="d-md-flex">
             <a href="/wp/wp-admin" class="c-button__primary">
                 Adminpaneel
             </a>
-            <a href="/wp/wp-admin/post-new.php?post_type=reservation" target="_blank" class="c-button__primary ml-4">
+            <a href="/wp/wp-admin/post-new.php?post_type=reservation" target="_blank" class="c-button__primary ml-md-4 mt-4 mt-md-0">
                 Baan afschermen
             </a>
         </div>
@@ -317,11 +317,11 @@ require 'page.php';
                     </form>
                 </div>
             <?php } else { ?>
-                <div class="d-flex align-items-end">
+                <div class="d-md-flex align-items-end">
                     <h2 class="m-0">
                         Alle reserveringen
                     </h2>
-                    <a href="?newreservation" class="c-button__primary ml-5">
+                    <a href="?newreservation" class="c-button__primary ml-md-5 mt-4 mt-md-0">
                         Nieuwe reservering
                     </a>
                 </div>

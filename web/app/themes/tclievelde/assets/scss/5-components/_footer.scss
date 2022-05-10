@@ -19,29 +19,31 @@
   font-weight: bold;
 }
 
-.menu {
-  padding: 0;
+.c-footer__menu {
+  .menu {
+    padding: 0;
 
-  .menu-item {
-    list-style-type: none;
+    .menu-item {
+      list-style-type: none;
 
-    &.active {
+      &.active {
 
-      &:before {
-        content: '';
-        position: absolute;
-        margin-top: 7px;
-        margin-left: -5px;
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background-color: #80d0ff;
+        &:before {
+          content: '';
+          position: absolute;
+          margin-top: 7px;
+          margin-left: -5px;
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background-color: #80d0ff;
+        }
       }
-    }
 
-    a {
-      margin-left: 10px;
-      color: $white;
+      a {
+        margin-left: 10px;
+        color: $white;
+      }
     }
   }
 }
