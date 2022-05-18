@@ -201,6 +201,7 @@ if (isset($_POST['aanmaken'])) {
         update_field('reservation_time_end', $datum.' '.$tijd[1], $post_id);
         update_field('reservation_court', $baan[1], $post_id);
         update_field('field_61c18b86ee6fd', $value, $post_id);
+        header('location: /reserveren');
         $succes = 'Uw reservering is succesvol aangemaakt.';
     }
 }
