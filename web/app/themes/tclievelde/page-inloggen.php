@@ -20,7 +20,7 @@ require 'page.php';
     <div class="container section">
         <form method="post" class="col-md-6">
             <p>
-                Gebruikersnaam:
+                Emailadres:
             </p>
             <input name="gebruikersnaam" type="text" />
             <p>
