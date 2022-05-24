@@ -71,7 +71,7 @@ if (isset($_GET['newreservation'])) {
 
 if (isset($_POST['aanmaken'])) {
     $baan = $_POST['baan'];
-    $datum = date('Y-m-d', strtotime($_POST['date']));
+    $datum = date('d-m-Y', strtotime($_POST['date']));
     $tijd = $_POST['time'];
     $lidnummer = $user['ID'];
     $medespeler1 = $_POST['speler1Id'] ?? 0;
@@ -93,7 +93,7 @@ if (isset($_POST['aanmaken'])) {
         $errmsg = 'U kunt niet in het verleden reserveren.';
     }
 
-    if ($datum == date('d-m-Y') && explode('-', $tijd)[0] <= date('H')) {
+    if ($datum == date('d-m-Y') && explode('-', $tijd[0]) <= date('H')) {
         $errmsg = 'U kunt niet in het verleden reserveren.';
     }
 
